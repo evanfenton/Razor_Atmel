@@ -18,6 +18,7 @@ Type Definitions
 Constants / Definitions
 **********************************************************************************************************************/
 
+#define MAX_PATTERN_SIZE          1000
 
 /**********************************************************************************************************************
 Function Declarations
@@ -39,6 +40,10 @@ void UserApp2RunActiveState(void);
 /* Private functions                                                                                                  */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+static u8 getNewEntry(void);
+static void showPatternEntry(u8 entry);
+static bool responseCorrect(u8 entry);
+static bool responseGiven(void);
 
 /***********************************************************************************************************************
 State Machine Declarations
@@ -46,7 +51,9 @@ State Machine Declarations
 static void UserApp2SM_Idle(void);    
 
 static void UserApp2SM_Error(void);         
-static void UserApp2SM_FailedInit(void);        
+static void UserApp2SM_FailedInit(void);       
+
+static void restart(void);
 
 
 #endif /* __USER_APP2_H */

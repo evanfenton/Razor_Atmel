@@ -71,9 +71,13 @@ void main(void)
 
   /* Application initialization */
 
-  UserApp1Initialize();
+  //UserApp1Initialize();
+  
+  // SIMON GAME INITIALIZING
   UserApp2Initialize();
-  UserApp3Initialize();
+  
+  
+  //UserApp3Initialize();
 
   
   /* Exit initialization */
@@ -101,9 +105,15 @@ void main(void)
     SdCardRunActiveState();
 
     /* Applications */
-    UserApp1RunActiveState();
+    
+    //UserApp1RunActiveState();
+    
+    
+    // SIMON GAME IN USERAPP2
     UserApp2RunActiveState();
-    UserApp3RunActiveState();
+    
+    
+    //UserApp3RunActiveState();
     
     /* System sleep*/
     HEARTBEAT_OFF();
