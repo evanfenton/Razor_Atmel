@@ -52,6 +52,10 @@ extern volatile u32 G_u32ApplicationFlags;             /* From main.c */
 extern volatile u32 G_u32SystemTime1ms;                /* From board-specific source file */
 extern volatile u32 G_u32SystemTime1s;                 /* From board-specific source file */
 
+extern u32 G_u32AntApiCurrentMessageTimeStamp;                            // From ant_api.c
+extern AntApplicationMessageType G_eAntApiCurrentMessageClass;            // From ant_api.c
+extern u8 G_au8AntApiCurrentMessageBytes[ANT_APPLICATION_MESSAGE_BYTES];  // From ant_api.c
+extern AntExtendedDataType G_sAntApiCurrentMessageExtData;                // From ant_api.c
 
 /***********************************************************************************************************************
 Global variable definitions with scope limited to this local application.
@@ -60,6 +64,18 @@ Variable names shall start with "UserApp1_" and be declared as static.
 static fnCode_type UserApp1_StateMachine;            /* The state machine function pointer */
 //static u32 UserApp1_u32Timeout;                      /* Timeout counter used across states */
 
+static u8 u8StalledMsg[ANT_DATA_BYTES]= " 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 ";
+static u8 u8ForwardMsg[ANT_DATA_BYTES]= " 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 ";
+static u8 u8BackwardMsg[ANT_DATA_BYTES]= " 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 ";
+static u8 u8RightTurnMsg[ANT_DATA_BYTES]= " 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 ";
+static u8 u8LeftTurnMsg[ANT_DATA_BYTES]= " 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 ";
+
+static u8 u8ForwardLCDMsg[]= "Going Forward";
+static u8 u8BackwardLCDMsg[]= "Going Backward";
+static u8 u8LeftLCDMsg[]= "Turning Left";
+static u8 u8RightLCDMsg[]= "Turning Right";
+
+static u8 u8ShowDirLCD[]= "F      B     <     >";
 
 /**********************************************************************************************************************
 Function Definitions
@@ -87,18 +103,9 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
+  // Configure as master node
+  AntMasterConfig();
  
-  /* If good initialization, set state to Idle */
-  if( 1 )
-  {
-    UserApp1_StateMachine = UserApp1SM_Idle;
-  }
-  else
-  {
-    /* The task isn't properly initialized, so shut it down and don't run */
-    UserApp1_StateMachine = UserApp1SM_Error;
-  }
-
 } /* end UserApp1Initialize() */
 
   
@@ -127,16 +134,173 @@ void UserApp1RunActiveState(void)
 /* Private functions                                                                                                  */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+/* ANT FUNCTIONS */
+static void AntInit(void)
+{
+  sChannelInfo.AntChannel          = ANT_CHANNEL_USERAPP;
+  sChannelInfo.AntChannelPeriodLo  = ANT_CHANNEL_PERIOD_LO_USERAPP;
+  sChannelInfo.AntChannelPeriodHi  = ANT_CHANNEL_PERIOD_HI_USERAPP;
+  sChannelInfo.AntDeviceIdLo       = ANT_DEVICEID_LO_USERAPP;
+  sChannelInfo.AntDeviceIdHi       = ANT_DEVICEID_HI_USERAPP;
+  sChannelInfo.AntDeviceType       = ANT_DEVICE_TYPE_USERAPP;
+  sChannelInfo.AntTransmissionType = ANT_TRANSMISSION_TYPE_USERAPP;
+  sChannelInfo.AntFrequency        = ANT_FREQUENCY_USERAPP;
+  sChannelInfo.AntTxPower          = ANT_TX_POWER_USERAPP;
+  sChannelInfo.AntNetwork          = ANT_NETWORK_DEFAULT;
+  
+  for(u8 i = 0; i < ANT_NETWORK_NUMBER_BYTES; i++)
+  {
+    sChannelInfo.AntNetworkKey[i] = ANT_DEFAULT_NETWORK_KEY;
+  }
+}
+
+
+
+static void AntMasterConfig(void)
+{
+  AntInit();
+  sChannelInfo.AntChannelType = CHANNEL_TYPE_MASTER;
+  if(AntAssignChannel(&sChannelInfo))
+  {
+    UserApp1_u32Timeout++;
+    UserApp1_StateMachine = UserApp1SM_ANT_ChannelAssign;
+    if(AntRadioStatusChannel(ANT_CHANNEL_USERAPP) == ANT_CONFIGURED)
+    {
+      LedOn(GREEN);
+      AntOpenChannelNumber(ANT_CHANNEL_USERAPP);
+      UserApp1_StateMachine = UserApp1SM_Game_State;
+    }
+    if(UserApp1_u32Timeout == 5000)
+    {
+      ClearAll();
+      LCDMessage(LINE1_START_ADDR, au8ANTFailConfig);
+      LCDMessage(LINE2_START_ADDR, au8ErrorReset);
+      LedOn(RED);
+      UserApp1_StateMachine = UserApp1SM_Error;
+    }
+  }
+  else
+  {
+    ClearAll();
+    LCDMessage(LINE1_START_ADDR, au8ANTFailInit);
+    LCDMessage(LINE2_START_ADDR, au8ErrorReset);
+    LedOn(RED);
+    UserApp1_StateMachine = UserApp1SM_Error;
+  }
+}
+
+
+
+static void AntSlaveConfig(void)
+{
+  AntInit();
+  sChannelInfo.AntChannelType = CHANNEL_TYPE_SLAVE;
+  if(AntAssignChannel(&sChannelInfo))
+  {
+    UserApp1_u32Timeout++;
+    UserApp1_StateMachine = UserApp1SM_ANT_ChannelAssign;
+    if(AntRadioStatusChannel(ANT_CHANNEL_USERAPP) == ANT_CONFIGURED)
+    {
+      AntOpenChannelNumber(ANT_CHANNEL_USERAPP);
+      UserApp1_StateMachine = UserApp1SM_Game_State;
+    }
+    if(UserApp1_u32Timeout == 5000)
+    {
+      ClearAll();
+      LCDMessage(LINE1_START_ADDR, au8ANTFailConfig);
+      LCDMessage(LINE2_START_ADDR, au8ErrorReset);
+      LedOn(RED);
+      UserApp1_StateMachine = UserApp1SM_Error;
+    }
+  }
+  else
+  {
+    ClearAll();
+    LCDMessage(LINE1_START_ADDR, au8ANTFailInit);
+    LCDMessage(LINE2_START_ADDR, au8ErrorReset);
+    LedOn(RED);
+    UserApp1_StateMachine = UserApp1SM_Error;
+  }
+}
 
 /**********************************************************************************************************************
 State Machine Function Definitions
 **********************************************************************************************************************/
 
+static void UserApp1SM_ANT_ChannelAssign(void)
+{
+  if(AntRadioStatusChannel(ANT_CHANNEL_USERAPP) == ANT_CONFIGURED)
+  {
+    AntOpenChannelNumber(ANT_CHANNEL_USERAPP);
+    UserApp1_StateMachine = UserApp1SM_Idle;
+  }
+  UserApp1_u32Timeout++;
+  if(UserApp1_u32Timeout == 5000)
+  {
+    //ClearAll();
+    //LCDMessage(LINE1_START_ADDR, au8ANTFailConfig);
+    //LCDMessage(LINE2_START_ADDR, au8ErrorReset);
+    LedBlink(RED, LED_2HZ);
+    UserApp1_StateMachine = UserApp1SM_Error;
+  }
+  //AcknowledgeAll();
+  
+  LCDClearChars(LINE1_START_ADDR, 20 );
+  LCDMessage(LINE2_START_ADDR, u8ShowDirLCD);
+} /* end UserApp1SM_ChannelAssign() */
+
+
+
 /*-------------------------------------------------------------------------------------------------------------------*/
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
-
+  
+  
+  //FORWARD
+  if(IsButtonPressed(BUTTON0))
+  {
+    LCDClearChars(LINE1_START_ADDR, 20 );
+    LCDMessage(LINE1_START_ADDR, u8FowardLCDMsg);
+    LedPWM(GREEN,  LED_PWM_50);
+    AntQueueBroadcastMessage(ANT_CHANNEL_USERAPP, u8ForwardMsg);
+  }
+  
+  //BACKWARD
+  else if(IsButtonPressed(BUTTON1))
+  {
+    LCDClearChars(LINE1_START_ADDR, 20 );
+    LCDMessage(LINE1_START_ADDR, u8BackwardLCDMsg);
+    LedPWM(YELLOW,  LED_PWM_50);
+    AntQueueBroadcastMessage(ANT_CHANNEL_USERAPP, u8BackwardMsg);
+  }
+  
+  //LEFT
+  else if(IsButtonPressed(BUTTON2))
+  {
+    LCDClearChars(LINE1_START_ADDR, 20 );
+    LCDMessage(LINE1_START_ADDR, u8LeftLCDMsg);
+    LedPWM(ORANGE,  LED_PWM_50);
+    AntQueueBroadcastMessage(ANT_CHANNEL_USERAPP, u8LeftTurnMsg);
+  }
+  
+  //RIGHT
+  else if(IsButtonPressed(BUTTON3))
+  {
+    LCDClearChars(LINE1_START_ADDR, 20 );
+    LCDMessage(LINE1_START_ADDR, u8RightLCDMsg);
+    LedPWM(RED,  LED_PWM_50);
+    AntQueueBroadcastMessage(ANT_CHANNEL_USERAPP, u8RightTurnMsg);
+  }
+  
+  //STALLED
+  else
+  {
+    LCDClearChars(LINE1_START_ADDR, 20 );
+    LedBlink(BLUE,  LED_2HZ);
+    AntQueueBroadcastMessage(ANT_CHANNEL_USERAPP, u8StalledMsg);
+  }
+  
 } /* end UserApp1SM_Idle() */
     
 
