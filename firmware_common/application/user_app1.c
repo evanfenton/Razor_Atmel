@@ -67,11 +67,17 @@ static u8 UserApp1_firstABC[]= "ABCDEFGHIJKLM       ";
 static u8 UserApp1_secondABC[]= "NOPQRSTUVWXYZ       ";
 static u8 UserApp1_nameCheckMSG[]= "Correct?     Y     N";
 
-static u8 UserApp1_userName[20];
+static u8 UserApp1_userName[]="Bob                 ";
 
 static u8 Userapp1_cursorPosition;
 static u8 Userapp1_nameSize;
 
+static u32 UserApp1_NameCheckTimer;                       /* for timing name checking */
+
+static u8 UserApp1_Display1;
+static u8 UserApp1_Display2;
+
+static bool UserApp1_Started;
 
 /**********************************************************************************************************************
 Function Definitions
@@ -110,21 +116,16 @@ void UserApp1Initialize(void)
   }
   LCDCommand(LCD_CLEAR_CMD);
   
-  LCDMessage(LINE1_START_ADDR, UserApp1_enterNameMSG);
-  LCDMessage(LINE2_START_ADDR, UserApp1_directionMSG);
+  DisplayNameInit();
   
-  for(u32 j = 0; j < 9000000; j++);
-  for(u32 j = 0; j < 9000000; j++);
-  
-  LCDCommand(LCD_HOME_CMD);
-  LCDCommand(LCD_DISPLAY_CMD | LCD_DISPLAY_ON | LCD_DISPLAY_CURSOR | LCD_DISPLAY_BLINK);
-  
-  LCDMessage(LINE1_START_ADDR, UserApp1_firstABC);
-  LCDMessage(LINE2_START_ADDR, UserApp1_secondABC);
+//  LCDCommand(LCD_HOME_CMD);
+//  LCDCommand(LCD_DISPLAY_CMD | LCD_DISPLAY_ON | LCD_DISPLAY_CURSOR | LCD_DISPLAY_BLINK);
   
   Userapp1_cursorPosition= LINE1_START_ADDR;
  
   Userapp1_nameSize= 0;
+  
+  UserApp1_Started= FALSE;
   
   /* If good initialization, set state to Idle */
   if( 1 )
@@ -165,6 +166,36 @@ void UserApp1RunActiveState(void)
 /* Private functions                                                                                                  */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+static void DisplayAlphabet(void)
+{
+  if(UserApp1_Display1 == 0){
+    LCDMessage(LINE1_START_ADDR, UserApp1_firstABC);
+    UserApp1_Display1++;
+  }
+  else{
+    LCDMessage(LINE2_START_ADDR, UserApp1_secondABC);
+    UserApp1_Display1= 0;
+  }
+}
+
+
+static void DisplayNameCheck(void)
+{
+  if(UserApp1_Display2 == 0){
+    LCDMessage(LINE1_START_ADDR, UserApp1_userName);
+    UserApp1_Display2++;
+  }
+  else{
+    LCDMessage(LINE2_START_ADDR, UserApp1_nameCheckMSG);
+    UserApp1_Display2= 0;
+  }
+}
+
+static void DisplayNameInit(void)
+{
+  LCDMessage(LINE1_START_ADDR, UserApp1_enterNameMSG);
+  LCDMessage(LINE2_START_ADDR, UserApp1_directionMSG);
+}
 
 /**********************************************************************************************************************
 State Machine Function Definitions
@@ -174,33 +205,51 @@ State Machine Function Definitions
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
-  // move cursor LEFT
-  if(WasButtonPressed(BUTTON0)){
-    ButtonAcknowledge(BUTTON0);
+  if(UserApp1_Started){
+    
+    DisplayAlphabet();
+    
+    // move cursor LEFT
+    if(WasButtonPressed(BUTTON0)){
+      ButtonAcknowledge(BUTTON0);
+      LedOn(ORANGE);
+    }
+  
+    // move cursor RIGHT
+    else if(WasButtonPressed(BUTTON1)){
+      ButtonAcknowledge(BUTTON1);
+      LedOn(RED);
+    }
+  
+    // SELECT the letter
+    else if(WasButtonPressed(BUTTON2)){
+      ButtonAcknowledge(BUTTON2);
+      LedOn(BLUE);
+      
+    
+    }
+  
+    // ENTER / FINISHED
+    else if(WasButtonPressed(BUTTON3)){
+      ButtonAcknowledge(BUTTON3);
+      UserApp1_NameCheckTimer= 0;
+      LedOn(GREEN);
+      UserApp1_StateMachine = UserApp1SM_NameCheck;
+    
+    }
+  }
+  else{
+    
+    if(WasButtonPressed(BUTTON3)){
+      ButtonAcknowledge(BUTTON3);
+      UserApp1_Started= TRUE;
+      
+    }
     
   }
   
-  // move cursor RIGHT
-  else if(WasButtonPressed(BUTTON1)){
-    ButtonAcknowledge(BUTTON1);
-    
-  }
   
-  // SELECT the letter
-  else if(WasButtonPressed(BUTTON2)){
-    ButtonAcknowledge(BUTTON2);
-    
-    
-    
-  }
   
-  // ENTER / FINISHED
-  else if(WasButtonPressed(BUTTON3)){
-    ButtonAcknowledge(BUTTON3);
-    
-    UserApp1_StateMachine = UserApp1SM_NameCheck;
-    
-  }
   
 } /* end UserApp1SM_Idle() */
 
@@ -208,20 +257,26 @@ static void UserApp1SM_Idle(void)
 static void UserApp1SM_NameCheck(void)
 {
   
-  LCDMessage(LINE1_START_ADDR, UserApp1_userName);
-  LCDMessage(LINE2_START_ADDR, UserApp1_nameCheckMSG);
-  
-  // YES, the name entered is CORRECT
-  if(WasButtonPressed(BUTTON2)){
-    ButtonAcknowledge(BUTTON2);
-    G_u8ApplicationIndicator= 2;
+  if(UserApp1_NameCheckTimer >= 4000){
+    
+    // YES, the name entered is CORRECT
+    if(WasButtonPressed(BUTTON2)){
+      ButtonAcknowledge(BUTTON2);
+      G_u8ApplicationIndicator= 2;
+    }
+    
+    // NO, the name entered is NOT CORRECT
+    else if(WasButtonPressed(BUTTON3)){
+      ButtonAcknowledge(BUTTON3);
+      Userapp1_cursorPosition= LINE1_START_ADDR;
+      Userapp1_nameSize= 0;
+      
+      UserApp1_StateMachine = UserApp1SM_Idle;
+    }
   }
-  
-  // NO, the name entered is NOT CORRECT
-  else if(WasButtonPressed(BUTTON3)){
-    ButtonAcknowledge(BUTTON3);
-    Userapp1_cursorPosition= LINE1_START_ADDR;
-    Userapp1_nameSize= 0;
+  else{
+    DisplayNameCheck();
+    UserApp1_NameCheckTimer++;
   }
   
 } /* end UserApp1SM_NameCheck() */

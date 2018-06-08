@@ -51,6 +51,9 @@ void UserApp1RunActiveState(void);
 /* Private functions                                                                                                  */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+static void DisplayAlphabet(void);
+static void DisplayNameCheck(void);
+static void DisplayNameInit(void);
 
 /***********************************************************************************************************************
 State Machine Declarations
