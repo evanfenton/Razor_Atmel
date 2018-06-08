@@ -48,6 +48,7 @@ volatile u32 G_u32UserApp1Flags;                       /* Global state flags */
 /* Existing variables (defined in other files -- should all contain the "extern" keyword) */
 extern volatile u32 G_u32SystemFlags;                  /* From main.c */
 extern volatile u32 G_u32ApplicationFlags;             /* From main.c */
+extern volatile u8  G_u8ApplicationIndicator;          /* From main.c */
 
 extern volatile u32 G_u32SystemTime1ms;                /* From board-specific source file */
 extern volatile u32 G_u32SystemTime1s;                 /* From board-specific source file */
@@ -59,6 +60,17 @@ Variable names shall start with "UserApp1_" and be declared as static.
 ***********************************************************************************************************************/
 static fnCode_type UserApp1_StateMachine;            /* The state machine function pointer */
 //static u32 UserApp1_u32Timeout;                      /* Timeout counter used across states */
+
+static u8 UserApp1_enterNameMSG[]= "Enter Your Name     ";
+static u8 UserApp1_directionMSG[]= "L     R    SEL   ENT";
+static u8 UserApp1_firstABC[]= "ABCDEFGHIJKLM       ";
+static u8 UserApp1_secondABC[]= "NOPQRSTUVWXYZ       ";
+static u8 UserApp1_nameCheckMSG[]= "Correct?     Y     N";
+
+static u8 UserApp1_userName[20];
+
+static u8 Userapp1_cursorPosition;
+static u8 Userapp1_nameSize;
 
 
 /**********************************************************************************************************************
@@ -87,7 +99,33 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
+  LedNumberType initSeq[]= {WHITE, PURPLE, BLUE, CYAN, GREEN, YELLOW, ORANGE, RED};
+  
+  for(u8 i=0; i<8; i++){
+    
+    LedOn(initSeq[i]);
+    for(u32 j = 0; j < 2000000; j++);
+    LedOff(initSeq[i]);
+    
+  }
+  LCDCommand(LCD_CLEAR_CMD);
+  
+  LCDMessage(LINE1_START_ADDR, UserApp1_enterNameMSG);
+  LCDMessage(LINE2_START_ADDR, UserApp1_directionMSG);
+  
+  for(u32 j = 0; j < 9000000; j++);
+  for(u32 j = 0; j < 9000000; j++);
+  
+  LCDCommand(LCD_HOME_CMD);
+  LCDCommand(LCD_DISPLAY_CMD | LCD_DISPLAY_ON | LCD_DISPLAY_CURSOR | LCD_DISPLAY_BLINK);
+  
+  LCDMessage(LINE1_START_ADDR, UserApp1_firstABC);
+  LCDMessage(LINE2_START_ADDR, UserApp1_secondABC);
+  
+  Userapp1_cursorPosition= LINE1_START_ADDR;
  
+  Userapp1_nameSize= 0;
+  
   /* If good initialization, set state to Idle */
   if( 1 )
   {
@@ -136,8 +174,57 @@ State Machine Function Definitions
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
-
+  // move cursor LEFT
+  if(WasButtonPressed(BUTTON0)){
+    ButtonAcknowledge(BUTTON0);
+    
+  }
+  
+  // move cursor RIGHT
+  else if(WasButtonPressed(BUTTON1)){
+    ButtonAcknowledge(BUTTON1);
+    
+  }
+  
+  // SELECT the letter
+  else if(WasButtonPressed(BUTTON2)){
+    ButtonAcknowledge(BUTTON2);
+    
+    
+    
+  }
+  
+  // ENTER / FINISHED
+  else if(WasButtonPressed(BUTTON3)){
+    ButtonAcknowledge(BUTTON3);
+    
+    UserApp1_StateMachine = UserApp1SM_NameCheck;
+    
+  }
+  
 } /* end UserApp1SM_Idle() */
+
+
+static void UserApp1SM_NameCheck(void)
+{
+  
+  LCDMessage(LINE1_START_ADDR, UserApp1_userName);
+  LCDMessage(LINE2_START_ADDR, UserApp1_nameCheckMSG);
+  
+  // YES, the name entered is CORRECT
+  if(WasButtonPressed(BUTTON2)){
+    ButtonAcknowledge(BUTTON2);
+    G_u8ApplicationIndicator= 2;
+  }
+  
+  // NO, the name entered is NOT CORRECT
+  else if(WasButtonPressed(BUTTON3)){
+    ButtonAcknowledge(BUTTON3);
+    Userapp1_cursorPosition= LINE1_START_ADDR;
+    Userapp1_nameSize= 0;
+  }
+  
+} /* end UserApp1SM_NameCheck() */
     
 
 /*-------------------------------------------------------------------------------------------------------------------*/

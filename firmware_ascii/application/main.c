@@ -14,6 +14,7 @@ All Global variable names shall start with "G_"
 /* New variables */
 volatile u32 G_u32SystemFlags = 0;                     /* Global system flags */
 volatile u32 G_u32ApplicationFlags = 0;                /* Global applications flags: set when application is successfully initialized */
+volatile u8  G_u8ApplicationIndicator;                 /* for switching the application running */
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* External global variables defined in other files (must indicate which file they are defined in) */
@@ -70,6 +71,8 @@ void main(void)
   SdCardInitialize();
 
   /* Application initialization */
+  
+  G_u8ApplicationIndicator = 1;
 
   UserApp1Initialize();
   UserApp2Initialize();
@@ -101,9 +104,29 @@ void main(void)
     SdCardRunActiveState();
 
     /* Applications */
-    UserApp1RunActiveState();
-    UserApp2RunActiveState();
-    UserApp3RunActiveState();
+    
+    switch(G_u8ApplicationIndicator)
+    {  
+    case 1:
+      // Start up application to set name and give info
+      UserApp1RunActiveState();
+      break;
+      
+    case 2:
+      // RC Car controller application
+      UserApp2RunActiveState();
+      break;
+      
+    case 3:
+      // Something else ...
+      UserApp3RunActiveState();
+      break;
+      
+    default:
+      break; 
+    }
+    
+    
     
     /* System sleep*/
     HEARTBEAT_OFF();
