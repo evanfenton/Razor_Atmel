@@ -71,7 +71,7 @@ static u8 u8LeftTurnMsg[ANT_DATA_BYTES]= { 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0
 static u8 u8RightTurnMsg[ANT_DATA_BYTES]= { 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04,   0x04 };
 
 
-static u8 * u8DirectionMsg;
+static u8 u8DirectionMsg[ANT_DATA_BYTES]= { 0x00, 0x00, 0x00, 0x00, 0xA5, 0x00, 0x00, 0x00 };
 /* last byte= 0x00 for STALLED
               0x01 for FORWARD
               0x02 for BACKWARD
@@ -243,7 +243,10 @@ static void Forward(void)
   LedOff(YELLOW);
   LedOff(ORANGE);
   LedOff(BLUE);
-  u8DirectionMsg= u8ForwardMsg;
+  u8DirectionMsg[0]= 0xFF;
+  u8DirectionMsg[1]= 0x00;
+  u8DirectionMsg[2]= 0x00;
+  u8DirectionMsg[3]= 0x00;
 }
 
 
@@ -254,7 +257,10 @@ static void Backward(void)
   LedOff(GREEN);
   LedOff(ORANGE);
   LedOff(BLUE);
-  u8DirectionMsg= u8BackwardMsg;
+  u8DirectionMsg[0]= 0x00;
+  u8DirectionMsg[1]= 0xFF;
+  u8DirectionMsg[2]= 0x00;
+  u8DirectionMsg[3]= 0x00;
   
 }
 
@@ -267,7 +273,10 @@ static void LeftTurn(void)
   LedOff(GREEN);
   LedOff(YELLOW);
   LedOff(BLUE);
-  u8DirectionMsg= u8LeftTurnMsg;
+  u8DirectionMsg[0]= 0x00;
+  u8DirectionMsg[1]= 0x00;
+  u8DirectionMsg[2]= 0xFF;
+  u8DirectionMsg[3]= 0x00;
 }
 
 
@@ -278,7 +287,10 @@ static void RightTurn(void)
   LedOff(GREEN);
   LedOff(YELLOW);
   LedOff(BLUE);
-  u8DirectionMsg= u8RightTurnMsg;
+  u8DirectionMsg[0]= 0x00;
+  u8DirectionMsg[1]= 0x00;
+  u8DirectionMsg[2]= 0x00;
+  u8DirectionMsg[3]= 0xFF;
 }
 
 
@@ -289,7 +301,10 @@ static void Stalled(void)
   LedOff(YELLOW);
   LedOff(RED);
   LedOn(BLUE);
-  u8DirectionMsg= u8StalledMsg;
+  u8DirectionMsg[0]= 0x00;
+  u8DirectionMsg[1]= 0x00;
+  u8DirectionMsg[2]= 0x00;
+  u8DirectionMsg[3]= 0x00;
 }
 
 /**********************************************************************************************************************
@@ -354,7 +369,11 @@ static void UserApp1SM_Idle(void)
     Stalled();
   }
   
-  AntQueueBroadcastMessage(ANT_CHANNEL_USERAPP, u8DirectionMsg);
+  
+  if( AntReadAppMessageBuffer() )
+  {
+     AntQueueBroadcastMessage(ANT_CHANNEL_USERAPP, u8DirectionMsg);
+  } 
   
 } /* end UserApp1SM_Idle() */
     
