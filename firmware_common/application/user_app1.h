@@ -65,7 +65,11 @@ static void AntInit(void);
 static void AntMasterConfig(void);
 static void AntSlaveConfig(void);
 
-
+static void Forward(void);
+static void Backward(void);
+static void LeftTurn(void);
+static void RightTurn(void);
+static void Stalled(void);
 
 /***********************************************************************************************************************
 State Machine Declarations
@@ -73,6 +77,7 @@ State Machine Declarations
 static void UserApp1SM_Idle(void);    
 static void UserApp1SM_ANT_ChannelAssign(void);
 static void UserApp1SM_Error(void);         
+static void UserApp1SM_Master_or_Slave(void);
 
 
 #endif /* __USER_APP1_H */
