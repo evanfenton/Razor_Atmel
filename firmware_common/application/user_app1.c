@@ -86,7 +86,7 @@ static u8 u8RightLCDMsg[]= "Turning Right";
 
 static u8 u8ShowDirLCD[]= "F      B     <     >";
 
-static AntAssignChannelInfoType sChannelInfo;
+AntAssignChannelInfoType sChannelInfo;
 
 
 /**********************************************************************************************************************
@@ -115,8 +115,11 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
+  UserApp1_StateMachine = UserApp1SM_Idle;
+  
+  
   // Configure as master node
-  AntMasterConfig();
+  
  
 } /* end UserApp1Initialize() */
 
@@ -176,20 +179,22 @@ static void AntMasterConfig(void)
   {
     UserApp1_u32Timeout++;
     UserApp1_StateMachine = UserApp1SM_ANT_ChannelAssign;
-    if(AntRadioStatusChannel(ANT_CHANNEL_USERAPP) == ANT_CONFIGURED)
-    {
-      LedOn(GREEN);
-      AntOpenChannelNumber(ANT_CHANNEL_USERAPP);
-      UserApp1_StateMachine = UserApp1SM_Idle;
-    }
-    if(UserApp1_u32Timeout == 5000)
-    {
-      //ClearAll();
-      //LCDMessage(LINE1_START_ADDR, au8ANTFailConfig);
-      //LCDMessage(LINE2_START_ADDR, au8ErrorReset);
-      LedOn(RED);
-      UserApp1_StateMachine = UserApp1SM_Error;
-    }
+    
+    LedOn(YELLOW);
+//    if(AntRadioStatusChannel(ANT_CHANNEL_USERAPP) == ANT_CONFIGURED)
+//    {
+//      LedOn(GREEN);
+//      AntOpenChannelNumber(ANT_CHANNEL_USERAPP);
+//      UserApp1_StateMachine = UserApp1SM_Idle;
+//    }
+//    if(UserApp1_u32Timeout == 5000)
+//    {
+//      //ClearAll();
+//      //LCDMessage(LINE1_START_ADDR, au8ANTFailConfig);
+//      //LCDMessage(LINE2_START_ADDR, au8ErrorReset);
+//      LedOn(RED);
+//      UserApp1_StateMachine = UserApp1SM_Error;
+//    }
   }
   else
   {
@@ -267,53 +272,58 @@ static void UserApp1SM_ANT_ChannelAssign(void)
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
-  
-  
-  //FORWARD
-  if(IsButtonPressed(BUTTON0))
-  {
-    LCDClearChars(LINE1_START_ADDR, 20 );
-    LCDMessage(LINE1_START_ADDR, u8ForwardLCDMsg);
-    LedPWM(GREEN,  LED_PWM_50);
-    u8DirectionMsg[7]= 0x01;
+  if(WasButtonPressed(BUTTON0)){
+    ButtonAcknowledge(BUTTON0);
+    LedOn(BLUE);
+    AntMasterConfig();
   }
+  LedOff(BLUE);
   
-  //BACKWARD
-  else if(IsButtonPressed(BUTTON1))
-  {
-    LCDClearChars(LINE1_START_ADDR, 20 );
-    LCDMessage(LINE1_START_ADDR, u8BackwardLCDMsg);
-    LedPWM(YELLOW,  LED_PWM_50);
-    u8DirectionMsg[7]= 0x02;
-  }
-  
-  //LEFT
-  else if(IsButtonPressed(BUTTON2))
-  {
-    LCDClearChars(LINE1_START_ADDR, 20 );
-    LCDMessage(LINE1_START_ADDR, u8LeftLCDMsg);
-    LedPWM(ORANGE,  LED_PWM_50);
-    u8DirectionMsg[7]= 0x03;
-  }
-  
-  //RIGHT
-  else if(IsButtonPressed(BUTTON3))
-  {
-    LCDClearChars(LINE1_START_ADDR, 20 );
-    LCDMessage(LINE1_START_ADDR, u8RightLCDMsg);
-    LedPWM(RED,  LED_PWM_50);
-    u8DirectionMsg[7]= 0x04;
-  }
-  
-  //STALLED
-  else
-  {
-    LCDClearChars(LINE1_START_ADDR, 20 );
-    LedBlink(BLUE,  LED_2HZ);
-    u8DirectionMsg[7]= 0x00;
-  }
-  
-  AntQueueBroadcastMessage(ANT_CHANNEL_USERAPP, u8DirectionMsg);
+//  //FORWARD
+//  if(IsButtonPressed(BUTTON0))
+//  {
+//    LCDClearChars(LINE1_START_ADDR, 20 );
+//    LCDMessage(LINE1_START_ADDR, u8ForwardLCDMsg);
+//    LedPWM(GREEN,  LED_PWM_50);
+//    u8DirectionMsg[7]= 0x01;
+//  }
+//  
+//  //BACKWARD
+//  else if(IsButtonPressed(BUTTON1))
+//  {
+//    LCDClearChars(LINE1_START_ADDR, 20 );
+//    LCDMessage(LINE1_START_ADDR, u8BackwardLCDMsg);
+//    LedPWM(YELLOW,  LED_PWM_50);
+//    u8DirectionMsg[7]= 0x02;
+//  }
+//  
+//  //LEFT
+//  else if(IsButtonPressed(BUTTON2))
+//  {
+//    LCDClearChars(LINE1_START_ADDR, 20 );
+//    LCDMessage(LINE1_START_ADDR, u8LeftLCDMsg);
+//    LedPWM(ORANGE,  LED_PWM_50);
+//    u8DirectionMsg[7]= 0x03;
+//  }
+//  
+//  //RIGHT
+//  else if(IsButtonPressed(BUTTON3))
+//  {
+//    LCDClearChars(LINE1_START_ADDR, 20 );
+//    LCDMessage(LINE1_START_ADDR, u8RightLCDMsg);
+//    LedPWM(RED,  LED_PWM_50);
+//    u8DirectionMsg[7]= 0x04;
+//  }
+//  
+//  //STALLED
+//  else
+//  {
+//    LCDClearChars(LINE1_START_ADDR, 20 );
+//    LedBlink(BLUE,  LED_2HZ);
+//    u8DirectionMsg[7]= 0x00;
+//  }
+//  
+//  AntQueueBroadcastMessage(ANT_CHANNEL_USERAPP, u8DirectionMsg);
   
 } /* end UserApp1SM_Idle() */
     
