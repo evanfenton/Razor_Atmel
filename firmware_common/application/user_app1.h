@@ -33,8 +33,8 @@ Constants / Definitions
 #define ANT_CHANNEL_USERAPP             ANT_CHANNEL_0         // Channel 0 - 7
 #define ANT_CHANNEL_PERIOD_LO_USERAPP   (u8)0x00              // LO; 0x0001 - 0x7fff
 #define ANT_CHANNEL_PERIOD_HI_USERAPP   (u8)0x20              // HI; 0x0001 - 0x7fff
-#define ANT_DEVICEID_LO_USERAPP         (u8)0x73              // Device # Low byte
-#define ANT_DEVICEID_HI_USERAPP         (u8)0x13              // Device # High byte
+#define ANT_DEVICEID_LO_USERAPP         (u8)0x21              // Device # Low byte
+#define ANT_DEVICEID_HI_USERAPP         (u8)0x00              // Device # High byte
 #define ANT_DEVICE_TYPE_USERAPP         (u8)1                 // 1 - 255
 #define ANT_TRANSMISSION_TYPE_USERAPP   (u8)1                 // 1-127; MSB is pairing
 #define ANT_FREQUENCY_USERAPP           (u8)50                // 2400MHz + 0 - 99 MHz
@@ -71,6 +71,10 @@ static void LeftTurn(void);
 static void RightTurn(void);
 static void Stalled(void);
 
+static void UserApp1NameEdit(void);
+static void UserApp1LCDInit(void);
+
+static void LEDLoading(void);
 /***********************************************************************************************************************
 State Machine Declarations
 ***********************************************************************************************************************/
