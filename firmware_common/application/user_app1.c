@@ -115,10 +115,14 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
+  LCDCommand(LCD_CLEAR_CMD);
+  
+  for(u32 u32i = 0; u32i < 10000; u32i++);
+  
+  LCDMessage(LINE1_START_ADDR, "Press B0 to");
+  LCDMessage(LINE2_START_ADDR, "connect");
+  
   UserApp1_StateMachine = UserApp1SM_Master_or_Slave;
-  
-  
-  
  
 } /* end UserApp1Initialize() */
 
@@ -181,10 +185,8 @@ static void AntMasterConfig(void)
     UserApp1_u32Timeout++;
     UserApp1_StateMachine = UserApp1SM_ANT_ChannelAssign;
     
-    //LedBlink(PURPLE, LED_2HZ);
     if(AntRadioStatusChannel(ANT_CHANNEL_USERAPP) == ANT_CONFIGURED)
     {
-      //LedBlink(CYAN, LED_2HZ);
       AntOpenChannelNumber(ANT_CHANNEL_USERAPP);
       UserApp1_StateMachine = UserApp1SM_Idle;
     }
@@ -212,11 +214,8 @@ static void AntSlaveConfig(void)
     UserApp1_u32Timeout++;
     UserApp1_StateMachine = UserApp1SM_ANT_ChannelAssign;
     
-    LedBlink(PURPLE, LED_2HZ);
-    
     if(AntRadioStatusChannel(ANT_CHANNEL_USERAPP) == ANT_CONFIGURED)
     {
-      LedOn(YELLOW);
       AntOpenChannelNumber(ANT_CHANNEL_USERAPP);
       UserApp1_StateMachine = UserApp1SM_Idle;
     }
@@ -236,75 +235,54 @@ static void AntSlaveConfig(void)
 
 /* DIRECTION FUNCTIONS */
 
-static void Forward(void)
+static void Forward(void) // element 0
 {
   LedOn(GREEN);
   LedOff(RED);
   LedOff(YELLOW);
   LedOff(ORANGE);
   LedOff(BLUE);
-  u8DirectionMsg[0]= 0xFF;
-  u8DirectionMsg[1]= 0x00;
-  u8DirectionMsg[2]= 0x00;
-  u8DirectionMsg[3]= 0x00;
 }
 
 
-static void Backward(void)
+static void Backward(void) // element 1
 {
-  LedOn(YELLOW);
-  LedOff(RED);
-  LedOff(GREEN);
-  LedOff(ORANGE);
-  LedOff(BLUE);
-  u8DirectionMsg[0]= 0x00;
-  u8DirectionMsg[1]= 0xFF;
-  u8DirectionMsg[2]= 0x00;
-  u8DirectionMsg[3]= 0x00;
-  
-}
-
-
-static void LeftTurn(void)
-{
-  
   LedOn(ORANGE);
   LedOff(RED);
   LedOff(GREEN);
   LedOff(YELLOW);
   LedOff(BLUE);
-  u8DirectionMsg[0]= 0x00;
-  u8DirectionMsg[1]= 0x00;
-  u8DirectionMsg[2]= 0xFF;
-  u8DirectionMsg[3]= 0x00;
 }
 
 
-static void RightTurn(void)
+static void LeftTurn(void) // element 2
 {
-  LedOn(RED);
+  
+  LedOn(BLUE);
+  LedOff(RED);
+  LedOff(GREEN);
+  LedOff(YELLOW);
+  LedOff(ORANGE);
+}
+
+
+static void RightTurn(void) // element 3
+{
+  LedOn(YELLOW);
+  LedOff(ORANGE);
+  LedOff(GREEN);
+  LedOff(RED);
+  LedOff(BLUE);
+}
+
+
+static void Stalled(void) //no element
+{
   LedOff(ORANGE);
   LedOff(GREEN);
   LedOff(YELLOW);
   LedOff(BLUE);
-  u8DirectionMsg[0]= 0x00;
-  u8DirectionMsg[1]= 0x00;
-  u8DirectionMsg[2]= 0x00;
-  u8DirectionMsg[3]= 0xFF;
-}
-
-
-static void Stalled(void)
-{
-  LedOff(ORANGE);
-  LedOff(GREEN);
-  LedOff(YELLOW);
-  LedOff(RED);
-  LedOn(BLUE);
-  u8DirectionMsg[0]= 0x00;
-  u8DirectionMsg[1]= 0x00;
-  u8DirectionMsg[2]= 0x00;
-  u8DirectionMsg[3]= 0x00;
+  LedOn(RED);
 }
 
 /**********************************************************************************************************************
@@ -315,12 +293,12 @@ static void UserApp1SM_Master_or_Slave(void)
   if(WasButtonPressed(BUTTON0))
   {
     ButtonAcknowledge(BUTTON0);
-    AntMasterConfig();
+    AntSlaveConfig();
   }
   if(WasButtonPressed(BUTTON1))
   {
     ButtonAcknowledge(BUTTON1);
-    AntSlaveConfig();
+    AntMasterConfig();
   }
 }
 
@@ -329,7 +307,6 @@ static void UserApp1SM_ANT_ChannelAssign(void)
 {
   if(AntRadioStatusChannel(ANT_CHANNEL_USERAPP) == ANT_CONFIGURED)
   {
-    //LedOn(CYAN);
     AntOpenChannelNumber(ANT_CHANNEL_USERAPP);
     UserApp1_StateMachine = UserApp1SM_Idle;
   }
@@ -348,19 +325,19 @@ static void UserApp1SM_ANT_ChannelAssign(void)
 static void UserApp1SM_Idle(void)
 {
   
-  if(IsButtonPressed(BUTTON0))
+  if(u8DirectionMsg[0] == 0xFF)
   {
     Forward();
   }
-  else if(IsButtonPressed(BUTTON1))
+  else if(u8DirectionMsg[1] == 0xFF)
   {
     Backward();
   }
-  else if(IsButtonPressed(BUTTON2))
+  else if(u8DirectionMsg[2] == 0xFF)
   {
     LeftTurn();
   }
-  else if(IsButtonPressed(BUTTON3))
+  else if(u8DirectionMsg[3] == 0xFF)
   {
     RightTurn();
   }
@@ -372,8 +349,13 @@ static void UserApp1SM_Idle(void)
   
   if( AntReadAppMessageBuffer() )
   {
-     AntQueueBroadcastMessage(ANT_CHANNEL_USERAPP, u8DirectionMsg);
+    LedOn(PURPLE);
+    for(u8 i = 0; i < ANT_DATA_BYTES; i++)
+    {
+      u8DirectionMsg[i] =  G_au8AntApiCurrentMessageBytes[i];
+    }
   } 
+  LedOff(PURPLE);
   
 } /* end UserApp1SM_Idle() */
     
