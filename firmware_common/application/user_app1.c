@@ -314,7 +314,7 @@ static void UserApp1SM_Idle(void)
   u32Timeout++;
   LedOff(GREEN);
   
-  if(u32Timeout == 30000)
+  if(u32Timeout == 60000)
   {
     LCDCommand(LCD_CLEAR_CMD);
     for(u32 i; i < 10000; i++);
