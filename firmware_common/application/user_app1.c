@@ -338,39 +338,6 @@ static void AntMasterConfig(void)
   }
 }
 
-
-
-static void AntSlaveConfig(void)
-{
-  AntInit();
-  sChannelInfo.AntChannelType = CHANNEL_TYPE_SLAVE;
-  if(AntAssignChannel(&sChannelInfo))
-  {
-    UserApp1_u32Timeout++;
-    UserApp1_StateMachine = UserApp1SM_ANT_ChannelAssign;
-    
-    LedBlink(PURPLE, LED_2HZ);
-    
-    if(AntRadioStatusChannel(ANT_CHANNEL_USERAPP) == ANT_CONFIGURED)
-    {
-      LedOn(YELLOW);
-      AntOpenChannelNumber(ANT_CHANNEL_USERAPP);
-      UserApp1_StateMachine = UserApp1SM_Idle;
-    }
-    if(UserApp1_u32Timeout == 5000)
-    {
-      LedBlink(RED, LED_4HZ);
-      UserApp1_StateMachine = UserApp1SM_Error;
-    }
-  }
-  else
-  {
-    LedOn(RED);
-    UserApp1_StateMachine = UserApp1SM_Error;
-  }
-}
-
-
 /* DIRECTION FUNCTIONS */
 
 static void Forward(void)
@@ -386,7 +353,6 @@ static void Forward(void)
   u8DirectionMsg[3]= 0x00;
 }
 
-
 static void Backward(void)
 {
   LedOn(YELLOW);
@@ -400,7 +366,6 @@ static void Backward(void)
   u8DirectionMsg[3]= 0x00;
   
 }
-
 
 static void LeftTurn(void)
 {
@@ -416,7 +381,6 @@ static void LeftTurn(void)
   u8DirectionMsg[3]= 0x00;
 }
 
-
 static void RightTurn(void)
 {
   LedOn(BLUE);
@@ -429,7 +393,6 @@ static void RightTurn(void)
   u8DirectionMsg[2]= 0x00;
   u8DirectionMsg[3]= 0xFF;
 }
-
 
 static void Stalled(void)
 {
@@ -454,15 +417,7 @@ static void UserApp1SM_Master_or_Slave(void)
     ButtonAcknowledge(BUTTON0);
     AntMasterConfig();
   }
-  /*
-  if(WasButtonPressed(BUTTON1))
-  {
-    ButtonAcknowledge(BUTTON1);
-    AntSlaveConfig();
-  }
-  */
 }
-
 
 static void UserApp1SM_ANT_ChannelAssign(void)
 {
@@ -519,7 +474,6 @@ static void UserApp1SM_Idle(void)
     {
       Stalled();
     }
-    
     if( AntReadAppMessageBuffer() )
     {
       AntQueueBroadcastMessage(ANT_CHANNEL_USERAPP, u8DirectionMsg);
