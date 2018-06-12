@@ -63,28 +63,12 @@ Variable names shall start with "UserApp1_" and be declared as static.
 ***********************************************************************************************************************/
 static fnCode_type UserApp1_StateMachine;            /* The state machine function pointer */
 static u32 UserApp1_u32Timeout;                      /* Timeout counter used across states */
-
-static u8 u8StalledMsg[ANT_DATA_BYTES]= { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,     0x00 };
-static u8 u8ForwardMsg[ANT_DATA_BYTES]= { 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,     0x01 };
-static u8 u8BackwardMsg[ANT_DATA_BYTES]= { 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02,    0x02 };
-static u8 u8LeftTurnMsg[ANT_DATA_BYTES]= { 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03,    0x03 };
-static u8 u8RightTurnMsg[ANT_DATA_BYTES]= { 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04,   0x04 };
-
-
-static u8 u8DirectionMsg[ANT_DATA_BYTES]= { 0x00, 0x00, 0x00, 0x00, 0xA5, 0x00, 0x00, 0x00 };
+static u8 u8DirectionMsg[ANT_DATA_BYTES]= { 0x01, 0x00, 0x00, 0x00, 0xA5, 0x00, 0x00, 0x00 };
 /* last byte= 0x00 for STALLED
               0x01 for FORWARD
               0x02 for BACKWARD
               0x03 for LEFT
               0x04 for RIGHT */
-
-
-static u8 u8ForwardLCDMsg[]= "Going Forward";
-static u8 u8BackwardLCDMsg[]= "Going Backward";
-static u8 u8LeftLCDMsg[]= "Turning Left";
-static u8 u8RightLCDMsg[]= "Turning Right";
-
-static u8 u8ShowDirLCD[]= "F      B     <     >";
 
 AntAssignChannelInfoType sChannelInfo;
 
@@ -119,8 +103,8 @@ void UserApp1Initialize(void)
   
   for(u32 u32i = 0; u32i < 10000; u32i++);
   
-  LCDMessage(LINE1_START_ADDR, "Press B0 to");
-  LCDMessage(LINE2_START_ADDR, "connect");
+  LCDMessage(LINE1_START_ADDR, "Press Button 0 to");
+  LCDMessage(LINE2_START_ADDR, "connect controller");
   
   UserApp1_StateMachine = UserApp1SM_Master_or_Slave;
  
@@ -176,35 +160,6 @@ static void AntInit(void)
   }
 }
 
-static void AntMasterConfig(void)
-{
-  AntInit();
-  sChannelInfo.AntChannelType = CHANNEL_TYPE_MASTER;
-  if(AntAssignChannel(&sChannelInfo))
-  {
-    UserApp1_u32Timeout++;
-    UserApp1_StateMachine = UserApp1SM_ANT_ChannelAssign;
-    
-    if(AntRadioStatusChannel(ANT_CHANNEL_USERAPP) == ANT_CONFIGURED)
-    {
-      AntOpenChannelNumber(ANT_CHANNEL_USERAPP);
-      UserApp1_StateMachine = UserApp1SM_Idle;
-    }
-    if(UserApp1_u32Timeout == 5000)
-    {
-      LedBlink(RED, LED_4HZ);
-      UserApp1_StateMachine = UserApp1SM_Error;
-    }
-  }
-  else
-  {
-    LedOn(RED);
-    UserApp1_StateMachine = UserApp1SM_Error;
-  }
-}
-
-
-
 static void AntSlaveConfig(void)
 {
   AntInit();
@@ -217,6 +172,8 @@ static void AntSlaveConfig(void)
     if(AntRadioStatusChannel(ANT_CHANNEL_USERAPP) == ANT_CONFIGURED)
     {
       AntOpenChannelNumber(ANT_CHANNEL_USERAPP);
+      LCDCommand(LCD_CLEAR_CMD);
+      LCDMessage(LINE1_START_ADDR, "Connected");
       UserApp1_StateMachine = UserApp1SM_Idle;
     }
     if(UserApp1_u32Timeout == 5000)
@@ -235,54 +192,44 @@ static void AntSlaveConfig(void)
 
 /* DIRECTION FUNCTIONS */
 
-static void Forward(void) // element 0
+static void Forward(void) // element 0 GREEN
 {
-  LedOn(GREEN);
-  LedOff(RED);
-  LedOff(YELLOW);
-  LedOff(ORANGE);
-  LedOff(BLUE);
+  LedOn(LCD_GREEN);
+  LedOff(LCD_RED);
+  LedOff(LCD_BLUE);
 }
 
 
-static void Backward(void) // element 1
+static void Backward(void) // element 1 YELLOW
 {
-  LedOn(ORANGE);
-  LedOff(RED);
-  LedOff(GREEN);
-  LedOff(YELLOW);
-  LedOff(BLUE);
+  LedOn(LCD_RED);
+  LedPWM(LCD_GREEN, LED_PWM_5);
+  LedOff(LCD_BLUE);
 }
 
 
-static void LeftTurn(void) // element 2
+static void LeftTurn(void) // element 2 PURPLE
 {
   
-  LedOn(BLUE);
-  LedOff(RED);
-  LedOff(GREEN);
-  LedOff(YELLOW);
-  LedOff(ORANGE);
+  LedOn(LCD_BLUE);
+  LedOff(LCD_RED);
+  LedOff(LCD_GREEN);
 }
 
 
-static void RightTurn(void) // element 3
+static void RightTurn(void) // element 3 BLUE
 {
-  LedOn(YELLOW);
-  LedOff(ORANGE);
-  LedOff(GREEN);
-  LedOff(RED);
-  LedOff(BLUE);
+  LedOn(LCD_GREEN);
+  LedOn(LCD_RED);
+  LedOff(LCD_BLUE);
 }
 
 
-static void Stalled(void) //no element
+static void Stalled(void) //no element RED
 {
-  LedOff(ORANGE);
-  LedOff(GREEN);
-  LedOff(YELLOW);
-  LedOff(BLUE);
-  LedOn(RED);
+  LedOff(LCD_GREEN);
+  LedOff(LCD_BLUE);
+  LedOn(LCD_RED);
 }
 
 /**********************************************************************************************************************
@@ -290,16 +237,19 @@ State Machine Function Definitions
 **********************************************************************************************************************/
 static void UserApp1SM_Master_or_Slave(void)
 {
+  LedOn(RED);
   if(WasButtonPressed(BUTTON0))
   {
     ButtonAcknowledge(BUTTON0);
     AntSlaveConfig();
   }
+  /*
   if(WasButtonPressed(BUTTON1))
   {
     ButtonAcknowledge(BUTTON1);
     AntMasterConfig();
   }
+  */
 }
 
 
@@ -308,6 +258,7 @@ static void UserApp1SM_ANT_ChannelAssign(void)
   if(AntRadioStatusChannel(ANT_CHANNEL_USERAPP) == ANT_CONFIGURED)
   {
     AntOpenChannelNumber(ANT_CHANNEL_USERAPP);
+    LedOff(GREEN);
     UserApp1_StateMachine = UserApp1SM_Idle;
   }
   UserApp1_u32Timeout++;
@@ -349,14 +300,16 @@ static void UserApp1SM_Idle(void)
   
   if( AntReadAppMessageBuffer() )
   {
-    LedOn(PURPLE);
-    for(u8 i = 0; i < ANT_DATA_BYTES; i++)
+    if(G_eAntApiCurrentMessageClass == ANT_DATA)
     {
-      u8DirectionMsg[i] =  G_au8AntApiCurrentMessageBytes[i];
+      LedOn(GREEN);
+      LedOff(RED);
+      for(u8 i = 0; i < ANT_DATA_BYTES; i++)
+      {
+        u8DirectionMsg[i] =  G_au8AntApiCurrentMessageBytes[i];
+      }
     }
-  } 
-  LedOff(PURPLE);
-  
+  }
 } /* end UserApp1SM_Idle() */
     
 
