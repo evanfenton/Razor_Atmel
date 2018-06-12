@@ -274,7 +274,7 @@ static void UserApp1SM_ANT_ChannelAssign(void)
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
-  
+  static u32 u32Timeout = 0;
   if(u8DirectionMsg[0] == 0xFF)
   {
     Forward();
@@ -303,11 +303,21 @@ static void UserApp1SM_Idle(void)
     {
       LedOn(GREEN);
       LedOff(RED);
+      LCDCommand(LCD_CLEAR_CMD);
+      u32Timeout = 0;
       for(u8 i = 0; i < ANT_DATA_BYTES; i++)
       {
-        u8DirectionMsg[i] =  G_au8AntApiCurrentMessageBytes[i];
+        u8DirectionMsg[i] = G_au8AntApiCurrentMessageBytes[i];
       }
     }
+  }
+  u32Timeout++;
+  LedOff(GREEN);
+  
+  if(u32Timeout == 30000)
+  {
+    LedBlink(RED, LED_2HZ);
+    UserApp1_StateMachine = UserApp1SM_Error;
   }
 } /* end UserApp1SM_Idle() */
     
