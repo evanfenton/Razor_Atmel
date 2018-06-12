@@ -316,7 +316,10 @@ static void UserApp1SM_Idle(void)
   
   if(u32Timeout == 30000)
   {
+    LCDCommand(LCD_CLEAR_CMD);
+    for(u32 i; i < 10000; i++);
     LedBlink(RED, LED_2HZ);
+    LCDMessage(LINE1_START_ADDR, "Lost Connection");
     UserApp1_StateMachine = UserApp1SM_Error;
   }
 } /* end UserApp1SM_Idle() */
