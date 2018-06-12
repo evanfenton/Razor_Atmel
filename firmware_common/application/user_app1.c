@@ -378,7 +378,7 @@ static void Forward(void)
   LedOn(GREEN);
   LedOff(RED);
   LedOff(YELLOW);
-  LedOff(ORANGE);
+  LedOff(PURPLE);
   LedOff(BLUE);
   u8DirectionMsg[0]= 0xFF;
   u8DirectionMsg[1]= 0x00;
@@ -389,10 +389,10 @@ static void Forward(void)
 
 static void Backward(void)
 {
-  LedOn(ORANGE);
+  LedOn(YELLOW);
   LedOff(RED);
   LedOff(GREEN);
-  LedOff(YELLOW);
+  LedOff(PURPLE);
   LedOff(BLUE);
   u8DirectionMsg[0]= 0x00;
   u8DirectionMsg[1]= 0xFF;
@@ -405,10 +405,10 @@ static void Backward(void)
 static void LeftTurn(void)
 {
   
-  LedOn(BLUE);
+  LedOn(PURPLE);
   LedOff(RED);
   LedOff(GREEN);
-  LedOff(ORANGE);
+  LedOff(BLUE);
   LedOff(YELLOW);
   u8DirectionMsg[0]= 0x00;
   u8DirectionMsg[1]= 0x00;
@@ -419,11 +419,11 @@ static void LeftTurn(void)
 
 static void RightTurn(void)
 {
-  LedOn(YELLOW);
+  LedOn(BLUE);
   LedOff(ORANGE);
   LedOff(GREEN);
   LedOff(RED);
-  LedOff(BLUE);
+  LedOff(PURPLE);
   u8DirectionMsg[0]= 0x00;
   u8DirectionMsg[1]= 0x00;
   u8DirectionMsg[2]= 0x00;
@@ -433,7 +433,7 @@ static void RightTurn(void)
 
 static void Stalled(void)
 {
-  LedOff(ORANGE);
+  LedOff(PURPLE);
   LedOff(GREEN);
   LedOff(YELLOW);
   LedOff(BLUE);
