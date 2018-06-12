@@ -173,7 +173,6 @@ static void AntSlaveConfig(void)
     {
       AntOpenChannelNumber(ANT_CHANNEL_USERAPP);
       LCDCommand(LCD_CLEAR_CMD);
-      LCDMessage(LINE1_START_ADDR, "Connected");
       UserApp1_StateMachine = UserApp1SM_Idle;
     }
     if(UserApp1_u32Timeout == 5000)
@@ -203,7 +202,7 @@ static void Forward(void) // element 0 GREEN
 static void Backward(void) // element 1 YELLOW
 {
   LedOn(LCD_RED);
-  LedPWM(LCD_GREEN, LED_PWM_5);
+  LedOn(LCD_GREEN);
   LedOff(LCD_BLUE);
 }
 
@@ -212,16 +211,16 @@ static void LeftTurn(void) // element 2 PURPLE
 {
   
   LedOn(LCD_BLUE);
-  LedOff(LCD_RED);
+  LedOn(LCD_RED);
   LedOff(LCD_GREEN);
 }
 
 
 static void RightTurn(void) // element 3 BLUE
 {
-  LedOn(LCD_GREEN);
-  LedOn(LCD_RED);
-  LedOff(LCD_BLUE);
+  LedOff(LCD_GREEN);
+  LedOff(LCD_RED);
+  LedOn(LCD_BLUE);
 }
 
 
