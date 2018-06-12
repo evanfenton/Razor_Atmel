@@ -62,7 +62,7 @@ Global variable definitions with scope limited to this local application.
 Variable names shall start with "UserApp1_" and be declared as static.
 ***********************************************************************************************************************/
 static fnCode_type UserApp1_StateMachine;            /* The state machine function pointer */
-static u32 UserApp1_u32Timeout;                      /* Timeout counter used across states */
+static u32 UserApp1_u32Timeout = 0;                      /* Timeout counter used across states */
 /*
 static u8 u8StalledMsg[ANT_DATA_BYTES]= { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,     0x00 };
 static u8 u8ForwardMsg[ANT_DATA_BYTES]= { 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,     0x01 };
@@ -125,8 +125,8 @@ void UserApp1Initialize(void)
   
   for(u32 u32I = 0; u32I < 10000; u32I++);
   
-  LCDMessage(LINE1_START_ADDR, "Press Button 0");
-  LCDMessage(LINE2_START_ADDR, "to connect");
+  LCDMessage(LINE1_START_ADDR, "Press Button 0 to");
+  LCDMessage(LINE2_START_ADDR, "connect to RC car");
   
   UserApp1_StateMachine = UserApp1SM_Master_or_Slave;
  
@@ -520,10 +520,9 @@ static void UserApp1SM_Idle(void)
       Stalled();
     }
     
-    
     if( AntReadAppMessageBuffer() )
     {
-       AntQueueBroadcastMessage(ANT_CHANNEL_USERAPP, u8DirectionMsg);
+      AntQueueBroadcastMessage(ANT_CHANNEL_USERAPP, u8DirectionMsg);
     }
   }
   
