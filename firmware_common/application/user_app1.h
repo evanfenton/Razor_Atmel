@@ -41,6 +41,9 @@ Constants / Definitions
 #define ANT_TX_POWER_USERAPP            RADIO_TX_POWER_4DBM   // Max tx power
 
 
+#define BACKWARD_SIGNAL                 (AT91C_BASE_PIOA->PIO_SODR = PA_13_INPUT_TOP);
+#define FORWARD_SIGNAL                  (AT91C_BASE_PIOA->PIO_SODR = PA_14_INPUT_BOT);
+
 
 /**********************************************************************************************************************
 Function Declarations

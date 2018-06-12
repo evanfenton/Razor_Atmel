@@ -403,6 +403,10 @@ counter must be set at 1280. */
 #define PA_15_BLADE_SCK          (u32)0x00008000
 #define PA_14_BLADE_MOSI         (u32)0x00004000
 #define PA_13_BLADE_MISO         (u32)0x00002000
+
+#define PA_13_INPUT_TOP          (u32)0x00002000
+#define PA_14_INPUT_BOT          (u32)0x00004000
+
 #define PA_12_BLADE_UPOMI        (u32)0x00001000
 #define PA_11_BLADE_UPIMO        (u32)0x00000800
 #define PA_10_I2C_SCL            (u32)0x00000400
