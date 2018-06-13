@@ -277,7 +277,6 @@ static void UserApp1SM_ANT_ChannelAssign(void)
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
-  FORWARD_SIGNAL
   static u32 u32Timeout = 0;
   if(u8DirectionMsg[0] == 0xFF)
   {
