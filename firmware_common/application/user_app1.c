@@ -384,7 +384,7 @@ static void LeftTurn(void)
 static void RightTurn(void)
 {
   LedOn(BLUE);
-  LedOff(ORANGE);
+  LedOff(YELLOW);
   LedOff(GREEN);
   LedOff(RED);
   LedOff(PURPLE);

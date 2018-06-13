@@ -685,7 +685,7 @@ static void DebugLedTestCharacter(u8 u8Char_)
     LedToggle(WHITE);
   }  
 
-  if(u8Char_ == 'P')
+  if(u8Char_ == 'P')                                                                                                                                                                                                                                                                             
   {
     LedToggle(PURPLE);
   } 
