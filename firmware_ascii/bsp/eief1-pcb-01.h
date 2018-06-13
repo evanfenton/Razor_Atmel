@@ -652,7 +652,7 @@ Configures the pin as an output or input.
 0: No effect
 1: Enables the output on the I/O line
 */
-#define PIOA_OER_INIT (u32)0xBF55D7F9
+#define PIOA_OER_INIT (u32)0xBF55F7F9
 /* 
     31 [1] PA_31_HEARTBEAT output enabled
     30 [0] PA_30_AN_DEMO input
@@ -676,7 +676,7 @@ Configures the pin as an output or input.
 
     15 [1] PA_15_BLADE_SCK output enabled
     14 [1] PA_14_BLADE_MOSI output enabled
-    13 [0] PA_13_BLADE_MISO input
+    13 [1] PA_13_BLADE_MISO output enabled
     12 [1] PA_12_BLADE_UPOMI output enabled
 
     11 [0] PA_11_BLADE_UPIMO  input
@@ -1013,7 +1013,7 @@ Default start-up IO values are held here.
 0: No effect
 1: Sets the data to be driven on the I/O line.
 */
-#define PIOA_SODR_INIT (u32)0x88010000
+#define PIOA_SODR_INIT (u32)0x88016000
 /* 
     31 [1] PA_31_HEARTBEAT output high 
     30 [0] PA_30_AN_DEMO N/A
@@ -1036,8 +1036,8 @@ Default start-up IO values are held here.
     16 [1] PA_16_BLADE_CS output high
 
     15 [0] PA_15_BLADE_SCK N/A
-    14 [0] PA_14_BLADE_MOSI N/A
-    13 [0] PA_13_BLADE_MISO N/A
+    14 [1] PA_14_BLADE_MOSI output high
+    13 [1] PA_13_BLADE_MISO output high
     12 [0] PA_12_BLADE_UPOMI N/A
 
     11 [0] PA_11_BLADE_UPIMO N/A
@@ -1104,7 +1104,7 @@ Initial output values are stored here.
 0: No effect
 1: Clears the data to be driven on the I/O line.
 */
-#define PIOA_CODR_INIT (u32)0x30000000
+#define PIOA_CODR_INIT (u32)0x30006000
 /* 
     31 [0] PA_31_HEARTBEAT output high 
     30 [0] PA_30_AN_DEMO N/A
@@ -1127,8 +1127,8 @@ Initial output values are stored here.
     16 [0] PA_16_BLADE_CS output high
 
     15 [0] PA_15_BLADE_SCK N/A
-    14 [0] PA_14_BLADE_MOSI N/A
-    13 [0] PA_13_BLADE_MISO N/A
+    14 [1] PA_14_BLADE_MOSI N/A
+    13 [1] PA_13_BLADE_MISO N/A
     12 [0] PA_12_BLADE_UPOMI N/A
 
     11 [0] PA_11_BLADE_UPIMO N/A
@@ -1194,7 +1194,7 @@ Initial output values are stored here.
 0: No effect
 1: Enables Multi Drive on the I/O line.
 */
-#define PIOA_MDER_INIT (u32)0x04000600
+#define PIOA_MDER_INIT (u32)0x04006600
 /* 
     31 [0] PA_31_HEARTBEAT
     30 [0] PA_30_AN_DEMO
@@ -1217,8 +1217,8 @@ Initial output values are stored here.
     16 [0] PA_16_BLADE_CS
 
     15 [0] PA_15_BLADE_SCK
-    14 [0] PA_14_BLADE_MOSI
-    13 [0] PA_13_BLADE_MISO
+    14 [1] PA_14_BLADE_MOSI
+    13 [1] PA_13_BLADE_MISO
     12 [0] PA_12_BLADE_UPOMI
 
     11 [0] PA_11_BLADE_UPIMO
