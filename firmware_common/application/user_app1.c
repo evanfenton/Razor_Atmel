@@ -194,7 +194,11 @@ static void AntSlaveConfig(void)
 
 static void Forward(void) // element 0 GREEN
 {
-  FORWARD_SIGNAL
+  SignalOff(INPUT_TOP);
+  SignalOn(INPUT_BOT);
+  SignalOn(EN_LEFT);
+  SignalOn(EN_RIGHT);
+  
   LedOn(LCD_GREEN);
   LedOff(LCD_RED);
   LedOff(LCD_BLUE);
@@ -203,7 +207,11 @@ static void Forward(void) // element 0 GREEN
 
 static void Backward(void) // element 1 YELLOW
 {
-  BACKWARD_SIGNAL
+  SignalOn(INPUT_TOP);
+  SignalOff(INPUT_BOT);
+  SignalOn(EN_LEFT);
+  SignalOn(EN_RIGHT);
+  
   LedOn(LCD_RED);
   LedOn(LCD_GREEN);
   LedOff(LCD_BLUE);
@@ -212,6 +220,10 @@ static void Backward(void) // element 1 YELLOW
 
 static void LeftTurn(void) // element 2 PURPLE
 {
+  SignalOff(INPUT_TOP);
+  SignalOn(INPUT_BOT);
+  SignalOff(EN_LEFT);
+  SignalOn(EN_RIGHT);
   
   LedOn(LCD_BLUE);
   LedOn(LCD_RED);
@@ -221,6 +233,11 @@ static void LeftTurn(void) // element 2 PURPLE
 
 static void RightTurn(void) // element 3 BLUE
 {
+  SignalOff(INPUT_TOP);
+  SignalOn(INPUT_BOT);
+  SignalOn(EN_LEFT);
+  SignalOff(EN_RIGHT);
+  
   LedOff(LCD_GREEN);
   LedOff(LCD_RED);
   LedOn(LCD_BLUE);
@@ -229,10 +246,27 @@ static void RightTurn(void) // element 3 BLUE
 
 static void Stalled(void) //no element RED
 {
+  
+  SignalOff(EN_LEFT);
+  SignalOff(EN_RIGHT);
+  
   LedOff(LCD_GREEN);
   LedOff(LCD_BLUE);
   LedOn(LCD_RED);
 }
+
+
+static void SignalOn(u32 pin)
+{
+  AT91C_BASE_PIOA->PIO_SODR= pin;
+}
+
+static void SignalOff(u32 pin)
+{
+  AT91C_BASE_PIOA->PIO_CODR= pin;
+}
+
+
 
 /**********************************************************************************************************************
 State Machine Function Definitions

@@ -41,9 +41,11 @@ Constants / Definitions
 #define ANT_TX_POWER_USERAPP            RADIO_TX_POWER_4DBM   // Max tx power
 
 
-#define BACKWARD_SIGNAL                 (AT91C_BASE_PIOA->PIO_SODR = PA_13_INPUT_TOP);
-#define FORWARD_SIGNAL                  (AT91C_BASE_PIOA->PIO_SODR = PA_14_INPUT_BOT);
+#define INPUT_TOP                       PA_16_BLADE_CS
+#define INPUT_BOT                       PA_15_BLADE_SCK
 
+#define EN_LEFT                         PA_13_BLADE_MISO
+#define EN_RIGHT                        PA_14_BLADE_MOSI
 
 /**********************************************************************************************************************
 Function Declarations
@@ -73,6 +75,9 @@ static void Backward(void);
 static void LeftTurn(void);
 static void RightTurn(void);
 static void Stalled(void);
+
+static void SignalOn(u32 pin);
+static void SignalOff(u32 pin);
 
 /***********************************************************************************************************************
 State Machine Declarations
