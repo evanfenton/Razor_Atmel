@@ -194,7 +194,6 @@ static void AntSlaveConfig(void)
 static void Forward(void) // element 0 GREEN
 {
   FORWARD_SIGNAL
- 
   LedOn(LCD_GREEN);
   LedOff(LCD_RED);
   LedOff(LCD_BLUE);
@@ -204,7 +203,6 @@ static void Forward(void) // element 0 GREEN
 static void Backward(void) // element 1 YELLOW
 {
   BACKWARD_SIGNAL
-  
   LedOn(LCD_RED);
   LedOn(LCD_GREEN);
   LedOff(LCD_BLUE);
