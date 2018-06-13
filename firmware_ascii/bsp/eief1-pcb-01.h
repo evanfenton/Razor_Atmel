@@ -470,7 +470,7 @@ counter must be set at 1280. */
 0: No effect
 1: Pin is controlled by PIO
 */
-#define PIOA_PER_INIT (u32)0x84030007
+#define PIOA_PER_INIT (u32)0x84036607
 /* 
     31 [1] PA_31_HEARTBEAT PIO control enabled
     30 [0] PA_30_AN_DEMO PIO control not enabled
@@ -513,7 +513,7 @@ counter must be set at 1280. */
     00 [1] PA_00_TP54 PIO control enabled
 */
 
-#define PIOB_PER_INIT (u32)0x01BFFF57
+#define PIOB_PER_INIT (u32)0x01BFFF5F
 /*
     31 [0] PB_31_ PIO control not enabled
     30 [0] PB_30_ PIO control not enabled
@@ -561,7 +561,7 @@ counter must be set at 1280. */
 0: No effect
 1: Pin is controlled by corresponding peripheral
 */
-#define PIOA_PDR_INIT (u32)0x7BFCFFF8
+#define PIOA_PDR_INIT (u32)0x7BFC99F8
 /* 
     31 [0] PA_31_HEARTBEAT not controlled by peripheral
     30 [1] PA_30_AN_DEMO controlled by peripheral
@@ -604,7 +604,7 @@ counter must be set at 1280. */
     00 [0] PA_00_TP54 not controlled by peripheral
 */
 
-#define PIOB_PDR_INIT (u32)0x00400058
+#define PIOB_PDR_INIT (u32)0x00400050
 /*
     31 [0] PB_31_ 
     30 [0] PB_30_ 
@@ -695,7 +695,7 @@ Configures the pin as an output or input.
     00 [1] PA_00_TP54 output enabled
 */
 
-#define PIOB_OER_INIT (u32)0x01BFFFE0
+#define PIOB_OER_INIT (u32)0x01BFFFE8
 /*
     31 [0] PB_31_
     30 [0] PB_30_
@@ -742,7 +742,7 @@ Configures the pin as an output or input.
 0: No effect
 1: Disables the output on the I/O line.
 */
-#define PIOA_ODR_INIT (u32)0x40AA2806
+#define PIOA_ODR_INIT (u32)0x40AA0806
 /* 
     31 [0] PA_31_HEARTBEAT output 
     30 [1] PA_30_AN_DEMO input
@@ -785,7 +785,7 @@ Configures the pin as an output or input.
     00 [0] PA_00_TP54 output 
 */
 
-#define PIOB_ODR_INIT (u32)0x0040001F
+#define PIOB_ODR_INIT (u32)0x00400017
 /*
     31 [0] PB_31_
     30 [0] PB_30_
@@ -1013,7 +1013,7 @@ Default start-up IO values are held here.
 0: No effect
 1: Sets the data to be driven on the I/O line.
 */
-#define PIOA_SODR_INIT (u32)0x88016000
+#define PIOA_SODR_INIT (u32)0x88016600
 /* 
     31 [1] PA_31_HEARTBEAT output high 
     30 [0] PA_30_AN_DEMO N/A
@@ -1056,7 +1056,7 @@ Default start-up IO values are held here.
     00 [0] PA_00_TP54 N/A
 */
 
-#define PIOB_SODR_INIT (u32)0x01BFFE00
+#define PIOB_SODR_INIT (u32)0x01BFFE08
 /*
     31 [0] PB_31_
     30 [0] PB_30_
@@ -1237,7 +1237,7 @@ Initial output values are stored here.
     00 [0] PA_00_TP54
 */
 
-#define PIOB_MDER_INIT (u32)0x00000000
+#define PIOB_MDER_INIT (u32)0x00000008
 /*
     31 [0] PB_31_
     30 [0] PB_30_
@@ -1284,7 +1284,7 @@ Initial output values are stored here.
 0: No effect
 1: Disables Multi Drive on the I/O line.
 */
-#define PIOA_MDDR_INIT (u32)0xFBFFF9FF
+#define PIOA_MDDR_INIT (u32)0xFBFF99FF
 /* 
     31 [1] PA_31_HEARTBEAT not open drain
     30 [1] PA_30_AN_DEMO not open drain
@@ -1327,7 +1327,7 @@ Initial output values are stored here.
     00 [1] PA_00_TP54 not open drain
 */
 
-#define PIOB_MDDR_INIT (u32)0x01FFFFFF
+#define PIOB_MDDR_INIT (u32)0x01FFFFF7
 /*
     31 [0] PB_31_
     30 [0] PB_30_
@@ -1598,7 +1598,7 @@ Initial output values are stored here.
     00 [0] PA_00_TP54 N/A
 */
 
-#define PIOB_ABSR_INIT (u32)0x00400018
+#define PIOB_ABSR_INIT (u32)0x00400010
 /*
     31 [0] PB_31_
     30 [0] PB_30_
@@ -1878,7 +1878,7 @@ Tdiv_slclk = 2*(DIV+1)*Tslow_clock.
 0: No effect
 1: Enables writing PIO_ODSR for the I/O line.
 */
-#define PIOA_OWER_INIT (u32)0xB4010000
+#define PIOA_OWER_INIT (u32)0xB4016600
 /* 
     31 [1] PA_31_HEARTBEAT write enabled
     30 [0] PA_30_AN_DEMO
@@ -1921,7 +1921,7 @@ Tdiv_slclk = 2*(DIV+1)*Tslow_clock.
     00 [0] PA_00_TP54
 */
 
-#define PIOB_OWER_INIT (u32)0x01FFFE0
+#define PIOB_OWER_INIT (u32)0x01FFFE8
 /*
     31 [0] PB_31_
     30 [0] PB_30_
