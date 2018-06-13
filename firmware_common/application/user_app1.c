@@ -57,6 +57,7 @@ extern AntApplicationMessageType G_eAntApiCurrentMessageClass;            // Fro
 extern u8 G_au8AntApiCurrentMessageBytes[ANT_APPLICATION_MESSAGE_BYTES];  // From ant_api.c
 extern AntExtendedDataType G_sAntApiCurrentMessageExtData;                // From ant_api.c
 
+AntAssignChannelInfoType sChannelInfo;
 /***********************************************************************************************************************
 Global variable definitions with scope limited to this local application.
 Variable names shall start with "UserApp1_" and be declared as static.
@@ -70,7 +71,7 @@ static u8 u8DirectionMsg[ANT_DATA_BYTES]= { 0x01, 0x00, 0x00, 0x00, 0xA5, 0x00, 
               0x03 for LEFT
               0x04 for RIGHT */
 
-AntAssignChannelInfoType sChannelInfo;
+
 
 
 /**********************************************************************************************************************
@@ -166,20 +167,20 @@ static void AntSlaveConfig(void)
   sChannelInfo.AntChannelType = CHANNEL_TYPE_SLAVE;
   if(AntAssignChannel(&sChannelInfo))
   {
-    UserApp1_u32Timeout++;
+//    UserApp1_u32Timeout++;
     UserApp1_StateMachine = UserApp1SM_ANT_ChannelAssign;
-    
-    if(AntRadioStatusChannel(ANT_CHANNEL_USERAPP) == ANT_CONFIGURED)
-    {
-      AntOpenChannelNumber(ANT_CHANNEL_USERAPP);
-      LCDCommand(LCD_CLEAR_CMD);
-      UserApp1_StateMachine = UserApp1SM_Idle;
-    }
-    if(UserApp1_u32Timeout == 5000)
-    {
-      LedBlink(RED, LED_4HZ);
-      UserApp1_StateMachine = UserApp1SM_Error;
-    }
+//    
+//    if(AntRadioStatusChannel(ANT_CHANNEL_USERAPP) == ANT_CONFIGURED)
+//    {
+//      AntOpenChannelNumber(ANT_CHANNEL_USERAPP);
+//      LCDCommand(LCD_CLEAR_CMD);
+//      UserApp1_StateMachine = UserApp1SM_Idle;
+//    }
+//    if(UserApp1_u32Timeout == 5000)
+//    {
+//      LedBlink(RED, LED_4HZ);
+//      UserApp1_StateMachine = UserApp1SM_Error;
+//    }
   }
   else
   {
@@ -319,7 +320,7 @@ static void UserApp1SM_Idle(void)
   if(u32Timeout == 60000)
   {
     LCDCommand(LCD_CLEAR_CMD);
-    for(u32 i; i < 10000; i++);
+    for(u32 i = 0; i < 10000; i++);
     LedBlink(RED, LED_2HZ);
     LCDMessage(LINE1_START_ADDR, "Lost Connection");
     UserApp1_StateMachine = UserApp1SM_Error;
