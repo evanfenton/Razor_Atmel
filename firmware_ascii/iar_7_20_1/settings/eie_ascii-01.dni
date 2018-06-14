@@ -9,7 +9,7 @@ TriggerName=main
 LimitSize=0
 ByteLimit=50
 [DebugChecksum]
-Checksum=-1384445195
+Checksum=-959693463
 [Exceptions]
 StopOnUncaught=_ 0
 StopOnThrow=_ 0
@@ -48,9 +48,6 @@ Stop=1
 [Simulator]
 Freq=10000000
 MultiCoreRunAll=1
-[Trace1]
-Enabled=0
-ShowSource=1
 [Disassemble mode]
 mode=0
 [Breakpoints2]
@@ -69,7 +66,7 @@ SuppressDialog=0
 Enabled=0
 [DriverProfiling]
 Enabled=0
-Mode=1
+Mode=0
 Graph=0
 Symbiont=0
 Exclusions=

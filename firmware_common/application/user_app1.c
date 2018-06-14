@@ -214,6 +214,8 @@ static void Backward(void) // element 1 YELLOW
 //  SignalOn(EN_LEFT);
 //  SignalOn(EN_RIGHT);
   
+  SignalOn(PA_11_BLADE_UPIMO);
+
   LedOn(LCD_RED);
   LedOn(LCD_GREEN);
   LedOff(LCD_BLUE);
@@ -253,7 +255,7 @@ static void Stalled(void) //no element RED
 //  SignalOff(EN_RIGHT);
   
   SignalOff(PA_12_BLADE_UPOMI);
-  
+  SignalOff(PA_11_BLADE_UPIMO);
   LedOff(LCD_GREEN);
   LedOff(LCD_BLUE);
   LedOn(LCD_RED);
