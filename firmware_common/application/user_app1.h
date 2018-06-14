@@ -41,8 +41,8 @@ Constants / Definitions
 #define ANT_TX_POWER_USERAPP            RADIO_TX_POWER_4DBM   // Max tx power
 
 
-#define INPUT_TOP                       PA_16_BLADE_CS
-#define INPUT_BOT                       PA_15_BLADE_SCK
+#define INPUT_TOP                       PA_12_BLADE_UPOMI /* TX */
+#define INPUT_BOT                       PA_11_BLADE_UPIMO /* RX */
 
 #define EN_LEFT                         PA_13_BLADE_MISO
 #define EN_RIGHT                        PA_14_BLADE_MOSI

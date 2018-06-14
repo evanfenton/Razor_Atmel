@@ -210,12 +210,10 @@ static void AntReadMessage(void)
 
 static void Forward(void) // element 0 GREEN
 {
-//  SignalOff(INPUT_TOP);
-//  SignalOn(INPUT_BOT);
-//  SignalOn(EN_LEFT);
-//  SignalOn(EN_RIGHT);
-  
-  SignalOn(PA_12_BLADE_UPOMI);
+  SignalOff(INPUT_TOP);
+  SignalOn(INPUT_BOT);
+  SignalOn(EN_LEFT);
+  SignalOn(EN_RIGHT);
   
   LedOn(LCD_GREEN);
   LedOff(LCD_RED);
@@ -225,12 +223,10 @@ static void Forward(void) // element 0 GREEN
 
 static void Backward(void) // element 1 YELLOW
 {
-//  SignalOn(INPUT_TOP);
-//  SignalOff(INPUT_BOT);
-//  SignalOn(EN_LEFT);
-//  SignalOn(EN_RIGHT);
-  
-  SignalOn(PA_11_BLADE_UPIMO);
+  SignalOn(INPUT_TOP);
+  SignalOff(INPUT_BOT);
+  SignalOn(EN_LEFT);
+  SignalOn(EN_RIGHT);
 
   LedOn(LCD_RED);
   LedOn(LCD_GREEN);
@@ -240,10 +236,10 @@ static void Backward(void) // element 1 YELLOW
 
 static void LeftTurn(void) // element 2 PURPLE
 {
-//  SignalOff(INPUT_TOP);
-//  SignalOn(INPUT_BOT);
-//  SignalOff(EN_LEFT);
-//  SignalOn(EN_RIGHT);
+  SignalOff(INPUT_TOP);
+  SignalOn(INPUT_BOT);
+  SignalOff(EN_LEFT);
+  SignalOn(EN_RIGHT);
   
   LedOn(LCD_BLUE);
   LedOn(LCD_RED);
@@ -253,10 +249,10 @@ static void LeftTurn(void) // element 2 PURPLE
 
 static void RightTurn(void) // element 3 BLUE
 {
-//  SignalOff(INPUT_TOP);
-//  SignalOn(INPUT_BOT);
-//  SignalOn(EN_LEFT);
-//  SignalOff(EN_RIGHT);
+  SignalOff(INPUT_TOP);
+  SignalOn(INPUT_BOT);
+  SignalOn(EN_LEFT);
+  SignalOff(EN_RIGHT);
   
   LedOff(LCD_GREEN);
   LedOff(LCD_RED);
@@ -266,12 +262,11 @@ static void RightTurn(void) // element 3 BLUE
 
 static void Stalled(void) //no element RED
 {
+  SignalOff(INPUT_TOP);
+  SignalOff(INPUT_BOT);
+  SignalOff(EN_LEFT);
+  SignalOff(EN_RIGHT);
   
-//  SignalOff(EN_LEFT);
-//  SignalOff(EN_RIGHT);
-  
-  SignalOff(PA_12_BLADE_UPOMI);
-  SignalOff(PA_11_BLADE_UPIMO);
   LedOff(LCD_GREEN);
   LedOff(LCD_BLUE);
   LedOn(LCD_RED);
