@@ -71,6 +71,11 @@ static u8 u8DirectionMsg[ANT_DATA_BYTES]= { 0x01, 0x00, 0x00, 0x00, 0xA5, 0x00, 
               0x03 for LEFT
               0x04 for RIGHT */
 
+static u8 FL_counter;
+static u8 FR_counter;
+static u8 BL_counter;
+static u8 BR_counter;
+
 
 
 
@@ -106,6 +111,11 @@ void UserApp1Initialize(void)
   
   LCDMessage(LINE1_START_ADDR, "Press Button 0 to");
   LCDMessage(LINE2_START_ADDR, "connect controller");
+  
+  FL_counter= 0;
+  FR_counter= 0;
+  BL_counter= 0;
+  BR_counter= 0;
   
   UserApp1_StateMachine = UserApp1SM_Master_or_Slave;
  
@@ -214,11 +224,8 @@ static void Forward(void) // element 0 GREEN
   SignalOn(INPUT_BOT);
   SignalOn(EN_LEFT);
   SignalOn(EN_RIGHT);
-  
-  LedOn(LCD_GREEN);
-  LedOff(LCD_RED);
-  LedOff(LCD_BLUE);
 }
+
 
 
 static void Backward(void) // element 1 YELLOW
@@ -228,35 +235,29 @@ static void Backward(void) // element 1 YELLOW
   SignalOn(EN_LEFT);
   SignalOn(EN_RIGHT);
 
-  LedOn(LCD_RED);
-  LedOn(LCD_GREEN);
-  LedOff(LCD_BLUE);
+  
 }
 
 
-static void LeftTurn(void) // element 2 PURPLE
+static void Left(void) // element 2 PURPLE
 {
   SignalOff(INPUT_TOP);
   SignalOn(INPUT_BOT);
   SignalOff(EN_LEFT);
   SignalOn(EN_RIGHT);
   
-  LedOn(LCD_BLUE);
-  LedOn(LCD_RED);
-  LedOff(LCD_GREEN);
+  
 }
 
 
-static void RightTurn(void) // element 3 BLUE
+static void Right(void) // element 3 BLUE
 {
   SignalOff(INPUT_TOP);
   SignalOn(INPUT_BOT);
   SignalOn(EN_LEFT);
   SignalOff(EN_RIGHT);
   
-  LedOff(LCD_GREEN);
-  LedOff(LCD_RED);
-  LedOn(LCD_BLUE);
+  
 }
 
 
@@ -273,19 +274,106 @@ static void Stalled(void) //no element RED
 }
 
 
-static void SignalOn(u32 pin)
+/* COMBINATION FUNCTIONS */
+
+static void Forward_Left(void)
 {
-//  AT91C_BASE_PIOA->PIO_SODR= pin;
+  FL_counter++;
   
+  if(FL_counter < 10)
+  {
+    Forward();
+  }
+  else if(FL_counter < 20)
+  {
+    Left();
+  }
+  else
+  {
+    FL_counter= 0;
+  }
+  
+}
+
+static void Forward_Right(void)
+{
+  
+  FR_counter++;
+  
+  if(FR_counter < 10)
+  {
+    Forward();
+  }
+  else if(FR_counter < 20)
+  {
+    Left();
+  }
+  else
+  {
+    FR_counter= 0;
+  }
+  
+}
+
+static void Backward_Left(void)
+{
+  
+  BL_counter++;
+  
+  if(BL_counter < 10)
+  {
+    Forward();
+  }
+  else if(BL_counter < 20)
+  {
+    Left();
+  }
+  else
+  {
+    BL_counter= 0;
+  }
+  
+}
+
+static void Backward_Right(void)
+{
+  
+  BR_counter++;
+  
+  if(BR_counter < 10)
+  {
+    Forward();
+  }
+  else if(BR_counter < 20)
+  {
+    Left();
+  }
+  else
+  {
+    BR_counter= 0;
+  }
+}
+
+static void CombinationLCD(void)
+{
+  //WHITE
+  LedOn(LCD_RED);
+  LedOn(LCD_GREEN);
+  LedOn(LCD_BLUE);
+}
+
+
+/* PIN SIGNAL FUNCTIONS */
+
+static void SignalOn(u32 pin)
+{ 
   u32 *pu32ToggleGPIO= (u32*)(&(AT91C_BASE_PIOA->PIO_SODR));
   *pu32ToggleGPIO = pin;
   
 }
 
 static void SignalOff(u32 pin)
-{
-//  AT91C_BASE_PIOA->PIO_CODR= pin;
-  
+{  
   u32 *pu32ToggleGPIO= (u32*)(&(AT91C_BASE_PIOA->PIO_CODR));
   *pu32ToggleGPIO = pin;
 }
@@ -303,13 +391,7 @@ static void UserApp1SM_Master_or_Slave(void)
     ButtonAcknowledge(BUTTON0);
     AntSlaveConfig();
   }
-  /*
-  if(WasButtonPressed(BUTTON1))
-  {
-    ButtonAcknowledge(BUTTON1);
-    AntMasterConfig();
-  }
-  */
+  
 }
 
 
@@ -335,24 +417,67 @@ static void UserApp1SM_ANT_ChannelAssign(void)
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
-  if(u8DirectionMsg[0] == 0xFF)
+  //FORWARD AND LEFT
+  if(u8DirectionMsg[0] == 0xFF && u8DirectionMsg[2] == 0xFF)
   {
+    CombinationLCD();
+    Forward_Left();
+  }
+  //FORWARD AND RIGHT
+  else if(u8DirectionMsg[0] == 0xFF && u8DirectionMsg[3] == 0xFF)
+  {
+    CombinationLCD();
+    Forward_Right();
+  }
+  //FORWARD
+  else if(u8DirectionMsg[0] == 0xFF)
+  {
+    LedOn(LCD_GREEN);
+    LedOff(LCD_RED);
+    LedOff(LCD_BLUE);
     Forward();
   }
+  
+  //BACKWARD AND LEFT
+  else if(u8DirectionMsg[1] == 0xFF && u8DirectionMsg[2] == 0xFF)
+  {
+    CombinationLCD();
+    Backward_Left();
+  }
+  //BACKWARD AND RIGHT
+  else if(u8DirectionMsg[1] == 0xFF && u8DirectionMsg[3] == 0xFF)
+  {
+    CombinationLCD();
+    Backward_Right();
+  }
+  //BACKWARD
   else if(u8DirectionMsg[1] == 0xFF)
   {
+    LedOn(LCD_RED);
+    LedOn(LCD_GREEN);
+    LedOff(LCD_BLUE);
     Backward();
   }
+  
+  //LEFT TURN
   else if(u8DirectionMsg[2] == 0xFF)
   {
+    LedOn(LCD_BLUE);
+    LedOn(LCD_RED);
+    LedOff(LCD_GREEN);
     LeftTurn();
   }
+  //RIGHT TURN
   else if(u8DirectionMsg[3] == 0xFF)
   {
+    LedOff(LCD_GREEN);
+    LedOff(LCD_RED);
+    LedOn(LCD_BLUE);
     RightTurn();
   }
   else
   {
+    //STALLED
     Stalled();
   }
   

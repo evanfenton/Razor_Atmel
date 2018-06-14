@@ -31,8 +31,8 @@ Constants / Definitions
 
 /* Required constants for ANT channel configuration */
 #define ANT_CHANNEL_USERAPP             ANT_CHANNEL_0         // Channel 0 - 7
-#define ANT_CHANNEL_PERIOD_LO_USERAPP   (u8)0x00              // LO; 0x0001 - 0x7fff
-#define ANT_CHANNEL_PERIOD_HI_USERAPP   (u8)0x20              // HI; 0x0001 - 0x7fff
+#define ANT_CHANNEL_PERIOD_LO_USERAPP   (u8)0x66              // LO; 0x0001 - 0x7fff
+#define ANT_CHANNEL_PERIOD_HI_USERAPP   (u8)0x06              // HI; 0x0001 - 0x7fff
 #define ANT_DEVICEID_LO_USERAPP         (u8)0x21              // Device # Low byte
 #define ANT_DEVICEID_HI_USERAPP         (u8)0x00              // Device # High byte
 #define ANT_DEVICE_TYPE_USERAPP         (u8)1                 // 1 - 255
@@ -70,12 +70,23 @@ static void AntInit(void);
 static void AntSlaveConfig(void);
 static void AntReadMessage(void);
 
+/* Directions */
 static void Forward(void);
 static void Backward(void);
-static void LeftTurn(void);
-static void RightTurn(void);
+static void Left(void);
+static void Right(void);
 static void Stalled(void);
 
+/* Combinations */
+static void Forward_Left(void);
+static void Forward_Right(void);
+
+static void Backward_Left(void);
+static void Backward_Right(void);
+
+static void CombinationLCD(void);
+
+/* Pin Signals */
 static void SignalOn(u32 pin);
 static void SignalOff(u32 pin);
 
