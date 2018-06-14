@@ -257,7 +257,6 @@ static void Right(void) // element 3 BLUE
   SignalOn(EN_LEFT);
   SignalOff(EN_RIGHT);
   
-  
 }
 
 
@@ -306,7 +305,7 @@ static void Forward_Right(void)
   }
   else if(FR_counter < 20)
   {
-    Left();
+    Right();
   }
   else
   {
@@ -322,11 +321,12 @@ static void Backward_Left(void)
   
   if(BL_counter < 10)
   {
-    Forward();
+    Backward();
   }
   else if(BL_counter < 20)
   {
-    Left();
+    Backward();
+    SignalOff(EN_LEFT);
   }
   else
   {
@@ -342,11 +342,12 @@ static void Backward_Right(void)
   
   if(BR_counter < 10)
   {
-    Forward();
+    Backward();
   }
   else if(BR_counter < 20)
   {
-    Left();
+    Backward();
+    SignalOff(EN_RIGHT);
   }
   else
   {
@@ -465,7 +466,7 @@ static void UserApp1SM_Idle(void)
     LedOn(LCD_BLUE);
     LedOn(LCD_RED);
     LedOff(LCD_GREEN);
-    LeftTurn();
+    Left();
   }
   //RIGHT TURN
   else if(u8DirectionMsg[3] == 0xFF)
@@ -473,7 +474,7 @@ static void UserApp1SM_Idle(void)
     LedOff(LCD_GREEN);
     LedOff(LCD_RED);
     LedOn(LCD_BLUE);
-    RightTurn();
+    Right();
   }
   else
   {
