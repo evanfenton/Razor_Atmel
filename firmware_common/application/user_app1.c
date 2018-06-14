@@ -86,9 +86,6 @@ static u8 u8RightLCDMsg[]= "Turning Right";
 */
 
 /******GLOBALS******/
-static u8 au8DriverName[12] = {'N', 'A', 'M', 'E'};
-static u8 u8CursorPosition = 8;
-static bool bEdit = TRUE;
 static bool bLoad = TRUE;
 static u32 u32Timer = 0;
 
@@ -195,98 +192,6 @@ static void LEDLoading(void)
 }
 
 
-//CALL BEFORE ENTERING IDLE STATE
-static void UserApp1LCDInit(void)
-{
-  static u8* au8NameEdit = "^     v    >/CLR  OK";
-  
-  LCDCommand(LCD_CLEAR_CMD);
-  
-  for(u32 u32I = 0; u32I < 10000; u32I++);
-  
-  LCDMessage(0x00, "Driver:");
-  LCDMessage(0x08, au8DriverName);
-  LCDMessage(LINE2_START_ADDR, au8NameEdit);
-  
-  for(u32 u32I = 0; u32I < 10000; u32I++);
-  
-  LCDCommand(LCD_DISPLAY_CMD | LCD_DISPLAY_ON | LCD_DISPLAY_CURSOR | LCD_DISPLAY_BLINK);
-  LCDCommand(LCD_ADDRESS_CMD | u8CursorPosition);
-}
-//CALL IN IDLE STATE
-static void UserApp1NameEdit(void)
-{ 
-  static bool bUpdateMessage = FALSE;
-  static u8 u8Index = 0;
-  static u8* au8Controls = "^     v      <     >";
-  
-  //SCROLL UP
-  if(WasButtonPressed(BUTTON0) && au8DriverName[u8Index] > 'A')
-  {
-    ButtonAcknowledge(BUTTON0);
-    au8DriverName[u8Index]--;
-    bUpdateMessage = TRUE;
-  }
-  //SCROLL DOWN
-  if(WasButtonPressed(BUTTON1) && au8DriverName[u8Index] < 'Z')
-  {
-    ButtonAcknowledge(BUTTON1);
-    au8DriverName[u8Index]++;
-    bUpdateMessage = TRUE;
-  }
-  //GET NEW LETTER
-  if(WasButtonPressed(BUTTON2) && u8Index < 11)
-  {
-    ButtonAcknowledge(BUTTON2);
-    u8Index++;
-    if(au8DriverName[u8Index] < 'A' || au8DriverName[u8Index] > 'Z')
-    {
-      bUpdateMessage = TRUE;
-      au8DriverName[u8Index] = 'A';
-    }
-    u8CursorPosition++;
-    LCDCommand(LCD_ADDRESS_CMD | u8CursorPosition);
-  }
-  //CLEAR
-  if(IsButtonHeld(BUTTON2, 500) && u8Index > 0)
-  {
-    au8DriverName[0] = 'A';
-    for(u8 u8i= 1; u8i < 11; u8i++)
-    {
-      au8DriverName[u8i] = ' ';
-    }
-    LCDClearChars(8, 12); 
-    u8Index = 0;
-    u8CursorPosition = 8;
-  }
-  //CONFIRM
-  if(WasButtonPressed(BUTTON3) || u8Index == 12)
-  {
-    ButtonAcknowledge(BUTTON3);
-    LCDCommand(LCD_DISPLAY_CMD | LCD_DISPLAY_ON);
-    LCDCommand(LCD_CLEAR_CMD);
-    
-    for(u32 u32I = 0; u32I < 10000; u32I++);
-    
-    LCDMessage(LINE1_START_ADDR, "Driving:");
-    LCDMessage(LINE1_START_ADDR+9, au8DriverName);
-    LCDMessage(LINE2_START_ADDR, au8Controls);
-    
-    /******Change some boolean to stop calling the function*******/
-    bEdit = FALSE;
-  }
-  //ONLY UPDATE LCD IF MESSAGE CHANGES
-  if(bUpdateMessage)
-  {
-    LCDMessage(0x08, au8DriverName);
-    
-    for(u32 u32I = 0; u32I < 10000; u32I++);
-    
-    LCDCommand(LCD_ADDRESS_CMD | u8CursorPosition);
-    bUpdateMessage = FALSE;
-  }
-}
-
 /* ANT FUNCTIONS */
 static void AntInit(void)
 {
@@ -364,7 +269,32 @@ static void Backward(void)
   u8DirectionMsg[1]= 0xFF;
   u8DirectionMsg[2]= 0x00;
   u8DirectionMsg[3]= 0x00;
-  
+}
+
+static void ForwardLeft(void)
+{
+  LedOn(GREEN);
+  LedOff(RED);
+  LedOff(YELLOW);
+  LedOn(PURPLE);
+  LedOff(BLUE);
+  u8DirectionMsg[0]= 0xFF;
+  u8DirectionMsg[1]= 0x00;
+  u8DirectionMsg[2]= 0xFF;
+  u8DirectionMsg[3]= 0x00;
+}
+
+static void BackwardLeft(void)
+{
+  LedOff(GREEN);
+  LedOff(RED);
+  LedOn(YELLOW);
+  LedOn(PURPLE);
+  LedOff(BLUE);
+  u8DirectionMsg[0]= 0x00;
+  u8DirectionMsg[1]= 0xFF;
+  u8DirectionMsg[2]= 0xFF;
+  u8DirectionMsg[3]= 0x00;
 }
 
 static void LeftTurn(void)
@@ -390,6 +320,32 @@ static void RightTurn(void)
   LedOff(PURPLE);
   u8DirectionMsg[0]= 0x00;
   u8DirectionMsg[1]= 0x00;
+  u8DirectionMsg[2]= 0x00;
+  u8DirectionMsg[3]= 0xFF;
+}
+
+static void ForwardRight(void)
+{
+  LedOn(GREEN);
+  LedOff(RED);
+  LedOff(YELLOW);
+  LedOff(PURPLE);
+  LedOn(BLUE);
+  u8DirectionMsg[0]= 0xFF;
+  u8DirectionMsg[1]= 0x00;
+  u8DirectionMsg[2]= 0x00;
+  u8DirectionMsg[3]= 0xFF;
+}
+
+static void BackwardRight(void)
+{
+  LedOff(GREEN);
+  LedOff(RED);
+  LedOn(YELLOW);
+  LedOff(PURPLE);
+  LedOn(BLUE);
+  u8DirectionMsg[0]= 0x00;
+  u8DirectionMsg[1]= 0xFF;
   u8DirectionMsg[2]= 0x00;
   u8DirectionMsg[3]= 0xFF;
 }
@@ -423,8 +379,11 @@ static void UserApp1SM_ANT_ChannelAssign(void)
 {
   if(AntRadioStatusChannel(ANT_CHANNEL_USERAPP) == ANT_CONFIGURED)
   {
-    UserApp1LCDInit();
+    bLoad = TRUE;
     AntOpenChannelNumber(ANT_CHANNEL_USERAPP);
+    LCDCommand(LCD_CLEAR_CMD);
+    for(u32 i = 0; i < 10000; i++);
+    LCDMessage(LINE2_START_ADDR, "^     v      <     >");  
     UserApp1_StateMachine = UserApp1SM_Idle;
   }
   UserApp1_u32Timeout++;
@@ -441,22 +400,31 @@ static void UserApp1SM_ANT_ChannelAssign(void)
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
-  if(bEdit)
+  if(bLoad)
   {
-    if(bLoad)
-    {
-      LEDLoading();
-    }
-    else
-    {
-      UserApp1NameEdit();
-    }
+    LEDLoading();
   }
   else
   {
-    if(IsButtonPressed(BUTTON0))
+    if(IsButtonPressed(BUTTON0) && IsButtonPressed(BUTTON2))
+    {
+      ForwardLeft();
+    }
+    else if(IsButtonPressed(BUTTON0) && IsButtonPressed(BUTTON3))
+    {
+      ForwardRight();
+    }
+    else if(IsButtonPressed(BUTTON0))
     {
       Forward();
+    }
+    else if(IsButtonPressed(BUTTON1) && IsButtonPressed(BUTTON2))
+    {
+      BackwardLeft();
+    }
+    else if(IsButtonPressed(BUTTON1) && IsButtonPressed(BUTTON3))
+    {
+      BackwardRight();
     }
     else if(IsButtonPressed(BUTTON1))
     {

@@ -31,8 +31,8 @@ Constants / Definitions
 
 /* Required constants for ANT channel configuration */
 #define ANT_CHANNEL_USERAPP             ANT_CHANNEL_0         // Channel 0 - 7
-#define ANT_CHANNEL_PERIOD_LO_USERAPP   (u8)0x00              // LO; 0x0001 - 0x7fff
-#define ANT_CHANNEL_PERIOD_HI_USERAPP   (u8)0x20              // HI; 0x0001 - 0x7fff
+#define ANT_CHANNEL_PERIOD_LO_USERAPP   (u8)0x66              // LO; 0x0001 - 0x7fff
+#define ANT_CHANNEL_PERIOD_HI_USERAPP   (u8)0x06              // HI; 0x0001 - 0x7fff
 #define ANT_DEVICEID_LO_USERAPP         (u8)0x21              // Device # Low byte
 #define ANT_DEVICEID_HI_USERAPP         (u8)0x00              // Device # High byte
 #define ANT_DEVICE_TYPE_USERAPP         (u8)1                 // 1 - 255
@@ -67,12 +67,17 @@ static void AntSlaveConfig(void);
 
 static void Forward(void);
 static void Backward(void);
+
+static void ForwardLeft(void);
+static void BackwardLeft(void);
+
 static void LeftTurn(void);
 static void RightTurn(void);
-static void Stalled(void);
 
-static void UserApp1NameEdit(void);
-static void UserApp1LCDInit(void);
+static void ForwardRight(void);
+static void BackwardRight(void);
+
+static void Stalled(void);
 
 static void LEDLoading(void);
 /***********************************************************************************************************************
