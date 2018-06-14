@@ -1328,7 +1328,7 @@ Initial output values are stored here.
     14 [1] PA_14_BLADE_MOSI not open drain
     13 [1] PA_13_BLADE_MISO not open drain
 
-    12 [0] PA_12_BLADE_UPOMI 
+    12 [0] PA_12_BLADE_UPOMI not open drain
 
     11 [0] PA_11_BLADE_UPIMO not open drain
 

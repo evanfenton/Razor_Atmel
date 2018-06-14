@@ -67,8 +67,8 @@ void UserApp1RunActiveState(void);
 /* Private functions                                                                                                  */
 /*--------------------------------------------------------------------------------------------------------------------*/
 static void AntInit(void);
-static void AntMasterConfig(void);
 static void AntSlaveConfig(void);
+static void AntReadMessage(void);
 
 static void Forward(void);
 static void Backward(void);

@@ -167,20 +167,7 @@ static void AntSlaveConfig(void)
   sChannelInfo.AntChannelType = CHANNEL_TYPE_SLAVE;
   if(AntAssignChannel(&sChannelInfo))
   {
-//    UserApp1_u32Timeout++;
     UserApp1_StateMachine = UserApp1SM_ANT_ChannelAssign;
-//    
-//    if(AntRadioStatusChannel(ANT_CHANNEL_USERAPP) == ANT_CONFIGURED)
-//    {
-//      AntOpenChannelNumber(ANT_CHANNEL_USERAPP);
-//      LCDCommand(LCD_CLEAR_CMD);
-//      UserApp1_StateMachine = UserApp1SM_Idle;
-//    }
-//    if(UserApp1_u32Timeout == 5000)
-//    {
-//      LedBlink(RED, LED_4HZ);
-//      UserApp1_StateMachine = UserApp1SM_Error;
-//    }
   }
   else
   {
@@ -189,6 +176,35 @@ static void AntSlaveConfig(void)
   }
 }
 
+static void AntReadMessage(void)
+{
+  static u32 u32Timeout = 0;
+  if( AntReadAppMessageBuffer() )
+  {
+    if(G_eAntApiCurrentMessageClass == ANT_DATA)
+    {
+      LedOn(GREEN);
+      LedOff(RED);
+      LCDCommand(LCD_CLEAR_CMD);
+      u32Timeout = 0;
+      for(u8 i = 0; i < ANT_DATA_BYTES; i++)
+      {
+        u8DirectionMsg[i] = G_au8AntApiCurrentMessageBytes[i];
+      }
+    }
+  }
+  u32Timeout++;
+  LedOff(GREEN);
+  
+  if(u32Timeout == 60000)
+  {
+    LCDCommand(LCD_CLEAR_CMD);
+    for(u32 i = 0; i < 10000; i++);
+    LedBlink(RED, LED_2HZ);
+    LCDMessage(LINE1_START_ADDR, "Lost Connection");
+    UserApp1_StateMachine = UserApp1SM_Error;
+  }  
+}
 
 /* DIRECTION FUNCTIONS */
 
@@ -324,7 +340,6 @@ static void UserApp1SM_ANT_ChannelAssign(void)
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
-  static u32 u32Timeout = 0;
   if(u8DirectionMsg[0] == 0xFF)
   {
     Forward();
@@ -346,32 +361,7 @@ static void UserApp1SM_Idle(void)
     Stalled();
   }
   
-  
-  if( AntReadAppMessageBuffer() )
-  {
-    if(G_eAntApiCurrentMessageClass == ANT_DATA)
-    {
-      LedOn(GREEN);
-      LedOff(RED);
-      LCDCommand(LCD_CLEAR_CMD);
-      u32Timeout = 0;
-      for(u8 i = 0; i < ANT_DATA_BYTES; i++)
-      {
-        u8DirectionMsg[i] = G_au8AntApiCurrentMessageBytes[i];
-      }
-    }
-  }
-  u32Timeout++;
-  LedOff(GREEN);
-  
-  if(u32Timeout == 60000)
-  {
-    LCDCommand(LCD_CLEAR_CMD);
-    for(u32 i = 0; i < 10000; i++);
-    LedBlink(RED, LED_2HZ);
-    LCDMessage(LINE1_START_ADDR, "Lost Connection");
-    UserApp1_StateMachine = UserApp1SM_Error;
-  }
+  AntReadMessage();
 } /* end UserApp1SM_Idle() */
     
 
