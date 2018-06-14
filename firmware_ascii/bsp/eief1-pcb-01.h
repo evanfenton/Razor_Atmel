@@ -467,7 +467,7 @@ counter must be set at 1280. */
 0: No effect
 1: Pin is controlled by PIO
 */
-#define PIOA_PER_INIT (u32)0x8403E007
+#define PIOA_PER_INIT (u32)0x84031007
 /* 
     31 [1] PA_31_HEARTBEAT PIO control enabled
     30 [0] PA_30_AN_DEMO PIO control not enabled
@@ -489,10 +489,12 @@ counter must be set at 1280. */
     17 [1] PA_17_BUTTON0 PIO control enabled
     16 [1] PA_16_BLADE_CS PIO control enabled
 
-    15 [1] PA_15_BLADE_SCK PIO control enabled
-    14 [1] PA_14_BLADE_MOSI PIO control enabled
-    13 [1] PA_13_BLADE_MISO PIO control enabled
-    12 [0] PA_12_BLADE_UPOMI PIO control not enabled
+    15 [0] PA_15_BLADE_SCK PIO control not enabled
+    14 [0] PA_14_BLADE_MOSI PIO control not enabled
+    13 [0] PA_13_BLADE_MISO PIO control not enabled
+
+    12 [1] PA_12_BLADE_UPOMI PIO control enabled
+
 
     11 [0] PA_11_BLADE_UPIMO PIO control not enabled
     10 [0] PA_10_I2C_SCL PIO control not enabled
@@ -510,7 +512,7 @@ counter must be set at 1280. */
     00 [1] PA_00_TP54 PIO control enabled
 */
 
-#define PIOB_PER_INIT (u32)0x01BFFF5F
+#define PIOB_PER_INIT (u32)0x01BFFF57
 /*
     31 [0] PB_31_ PIO control not enabled
     30 [0] PB_30_ PIO control not enabled
@@ -547,7 +549,7 @@ counter must be set at 1280. */
     05 [1] PB_05_TP56 PIO control enabled
     04 [0] PB_04_BLADE_AN1 PIO control not enabled
 
-    03 [1] PB_03_BLADE_AN0 PIO control enabled 
+    03 [0] PB_03_BLADE_AN0 PIO control not enabled
     02 [1] PB_02_BUTTON3 PIO control enabled
     01 [1] PB_01_BUTTON2 PIO control enabled
     00 [1] PB_00_BUTTON1 PIO control enabled
@@ -558,7 +560,7 @@ counter must be set at 1280. */
 0: No effect
 1: Pin is controlled by corresponding peripheral
 */
-#define PIOA_PDR_INIT (u32)0x7BFC1FF8
+#define PIOA_PDR_INIT (u32)0x7BFCEFF8
 /* 
     31 [0] PA_31_HEARTBEAT not controlled by peripheral
     30 [1] PA_30_AN_DEMO controlled by peripheral
@@ -580,10 +582,12 @@ counter must be set at 1280. */
     17 [0] PA_17_BUTTON0 not controlled by peripheral
     16 [0] PA_16_BLADE_CS not controlled by peripheral
 
-    15 [0] PA_15_BLADE_SCK not controlled by peripheral
-    14 [0] PA_14_BLADE_MOSI not controlled by peripheral
-    13 [0] PA_13_BLADE_MISO not controlled by peripheral
-    12 [1] PA_12_BLADE_UPOMI controlled by peripheral
+    15 [1] PA_15_BLADE_SCK controlled by peripheral
+    14 [1] PA_14_BLADE_MOSI controlled by peripheral
+    13 [1] PA_13_BLADE_MISO controlled by peripheral
+
+    12 [0] PA_12_BLADE_UPOMI not controlled by peripheral
+
 
     11 [1] PA_11_BLADE_UPIMO controlled by peripheral
     10 [1] PA_10_I2C_SCL controlled by peripheral
@@ -601,7 +605,7 @@ counter must be set at 1280. */
     00 [0] PA_00_TP54 not controlled by peripheral
 */
 
-#define PIOB_PDR_INIT (u32)0x00400050
+#define PIOB_PDR_INIT (u32)0x00400058
 /*
     31 [0] PB_31_ 
     30 [0] PB_30_ 
@@ -638,7 +642,7 @@ counter must be set at 1280. */
     05 [0] PB_05_TP56 not controlled by peripheral
     04 [1] PB_04_BLADE_AN1 controlled by peripheral
 
-    03 [0] PB_03_BLADE_AN0 not controlled by peripheral
+    03 [1] PB_03_BLADE_AN0 controlled by peripheral
     02 [0] PB_02_BUTTON3 not controlled by peripheral
     01 [0] PB_01_BUTTON2 not controlled by peripheral
     00 [0] PB_00_BUTTON1 not controlled by peripheral
@@ -649,7 +653,7 @@ Configures the pin as an output or input.
 0: No effect
 1: Enables the output on the I/O line
 */
-#define PIOA_OER_INIT (u32)0xBF55F7F9
+#define PIOA_OER_INIT (u32)0xBF55D7F9
 /* 
     31 [1] PA_31_HEARTBEAT output enabled
     30 [0] PA_30_AN_DEMO input
@@ -673,7 +677,7 @@ Configures the pin as an output or input.
 
     15 [1] PA_15_BLADE_SCK output enabled
     14 [1] PA_14_BLADE_MOSI output enabled
-    13 [1] PA_13_BLADE_MISO output enabled
+    13 [0] PA_13_BLADE_MISO input
     12 [1] PA_12_BLADE_UPOMI output enabled
 
     11 [0] PA_11_BLADE_UPIMO  input
@@ -692,7 +696,7 @@ Configures the pin as an output or input.
     00 [1] PA_00_TP54 output enabled
 */
 
-#define PIOB_OER_INIT (u32)0x01BFFFE8
+#define PIOB_OER_INIT (u32)0x01BFFFE0
 /*
     31 [0] PB_31_
     30 [0] PB_30_
@@ -729,7 +733,7 @@ Configures the pin as an output or input.
     05 [1] PB_05_TP56 output enabled
     04 [0] PB_04_BLADE_AN1 input
 
-    03 [1] PB_03_BLADE_AN0 output enabled
+    03 [0] PB_03_BLADE_AN0 input
     02 [0] PB_02_BUTTON3 input
     01 [0] PB_01_BUTTON2 input
     00 [0] PB_00_BUTTON1 input
@@ -739,7 +743,7 @@ Configures the pin as an output or input.
 0: No effect
 1: Disables the output on the I/O line.
 */
-#define PIOA_ODR_INIT (u32)0x40AA0806
+#define PIOA_ODR_INIT (u32)0x40AA2806
 /* 
     31 [0] PA_31_HEARTBEAT output 
     30 [1] PA_30_AN_DEMO input
@@ -762,13 +766,13 @@ Configures the pin as an output or input.
     16 [0] PA_16_BLADE_CS output 
 
     15 [0] PA_15_BLADE_SCK output 
-    14 [0] PA_14_BLADE_MOSI output 
-    13 [0] PA_13_BLADE_MISO output
+    14 [0] PA_14_BLADE_MOSI output
+    13 [1] PA_13_BLADE_MISO input
     12 [0] PA_12_BLADE_UPOMI output 
 
     11 [1] PA_11_BLADE_UPIMO input
     10 [0] PA_10_I2C_SCL output 
-    09 [0] PA_09_I2C_SDA output 
+    09 [0] PA_09_I2C_SDA input 
     08 [0] PA_08_SD_CS_MCDA3 output 
 
     07 [0] PA_07_HSMCI_MCDA2 output 
@@ -782,7 +786,7 @@ Configures the pin as an output or input.
     00 [0] PA_00_TP54 output 
 */
 
-#define PIOB_ODR_INIT (u32)0x00400017
+#define PIOB_ODR_INIT (u32)0x0040001F
 /*
     31 [0] PB_31_
     30 [0] PB_30_
@@ -819,7 +823,7 @@ Configures the pin as an output or input.
     05 [0] PB_05_TP56 output 
     04 [1] PB_04_BLADE_AN1 input
 
-    03 [0] PB_03_BLADE_AN0 output
+    03 [1] PB_03_BLADE_AN0 input
     02 [1] PB_02_BUTTON3 input
     01 [1] PB_01_BUTTON2 input
     00 [1] PB_00_BUTTON1 input
@@ -1010,7 +1014,7 @@ Default start-up IO values are held here.
 0: No effect
 1: Sets the data to be driven on the I/O line.
 */
-#define PIOA_SODR_INIT (u32)0x8801E000
+#define PIOA_SODR_INIT (u32)0x88011000
 /* 
     31 [1] PA_31_HEARTBEAT output high 
     30 [0] PA_30_AN_DEMO N/A
@@ -1032,13 +1036,15 @@ Default start-up IO values are held here.
     17 [0] PA_17_BUTTON0 N/A
     16 [1] PA_16_BLADE_CS output high
 
-    15 [1] PA_15_BLADE_SCK output high
-    14 [1] PA_14_BLADE_MOSI output high
-    13 [1] PA_13_BLADE_MISO output high
-    12 [0] PA_12_BLADE_UPOMI N/A
+    15 [0] PA_15_BLADE_SCK N/A
+    14 [0] PA_14_BLADE_MOSI N/A
+    13 [0] PA_13_BLADE_MISO N/A
+
+    12 [1] PA_12_BLADE_UPOMI output high
+
 
     11 [0] PA_11_BLADE_UPIMO N/A
-    10 [0] PA_10_I2C_SCL N/A
+    10 [0] PA_10_I2C_SCL N/A 
     09 [0] PA_09_I2C_SDA N/A
     08 [0] PA_08_SD_CS_MCDA3 N/A
 
@@ -1053,7 +1059,7 @@ Default start-up IO values are held here.
     00 [0] PA_00_TP54 N/A
 */
 
-#define PIOB_SODR_INIT (u32)0x01BFFE08
+#define PIOB_SODR_INIT (u32)0x01BFFE00
 /*
     31 [0] PB_31_
     30 [0] PB_30_
@@ -1090,7 +1096,7 @@ Default start-up IO values are held here.
     05 [0] PB_05_TP56 N/A
     04 [0] PB_04_BLADE_AN1 N/A
 
-    03 [1] PB_03_BLADE_AN0 output high
+    03 [0] PB_03_BLADE_AN0 N/A
     02 [0] PB_02_BUTTON3 N/A
     01 [0] PB_01_BUTTON2 N/A
     00 [0] PB_00_BUTTON1 N/A
@@ -1129,7 +1135,7 @@ Initial output values are stored here.
     12 [0] PA_12_BLADE_UPOMI N/A
 
     11 [0] PA_11_BLADE_UPIMO N/A
-    10 [0] PA_10_I2C_SCL N/A
+    10 [0] PA_10_I2C_SCL N/A  CHANGED(again)
     09 [0] PA_09_I2C_SDA N/A
     08 [0] PA_08_SD_CS_MCDA3 N/A
 
@@ -1191,7 +1197,7 @@ Initial output values are stored here.
 0: No effect
 1: Enables Multi Drive on the I/O line.
 */
-#define PIOA_MDER_INIT (u32)0x0401E600
+#define PIOA_MDER_INIT (u32)0x04001600
 /* 
     31 [0] PA_31_HEARTBEAT
     30 [0] PA_30_AN_DEMO
@@ -1211,12 +1217,12 @@ Initial output values are stored here.
     19 [0] PA_19_DEBUG_U0_PIMO
     18 [0] PA_18_DEBUG_U0_POMI
     17 [0] PA_17_BUTTON0
-    16 [1] PA_16_BLADE_CS open drain
+    16 [0] PA_16_BLADE_CS
 
-    15 [1] PA_15_BLADE_SCK open drain
-    14 [1] PA_14_BLADE_MOSI open drain
-    13 [1] PA_13_BLADE_MISO open drain
-    12 [0] PA_12_BLADE_UPOMI
+    15 [0] PA_15_BLADE_SCK
+    14 [0] PA_14_BLADE_MOSI 
+    13 [0] PA_13_BLADE_MISO
+    12 [1] PA_12_BLADE_UPOMI open drain
 
     11 [0] PA_11_BLADE_UPIMO
     10 [1] PA_10_I2C_SCL open drain
@@ -1234,7 +1240,7 @@ Initial output values are stored here.
     00 [0] PA_00_TP54
 */
 
-#define PIOB_MDER_INIT (u32)0x00000008
+#define PIOB_MDER_INIT (u32)0x00000000
 /*
     31 [0] PB_31_
     30 [0] PB_30_
@@ -1271,7 +1277,7 @@ Initial output values are stored here.
     05 [0] PB_05_TP56
     04 [0] PB_04_BLADE_AN1
 
-    03 [1] PB_03_BLADE_AN0 open drain
+    03 [0] PB_03_BLADE_AN0
     02 [0] PB_02_BUTTON3
     01 [0] PB_01_BUTTON2
     00 [0] PB_00_BUTTON1
@@ -1281,7 +1287,7 @@ Initial output values are stored here.
 0: No effect
 1: Disables Multi Drive on the I/O line.
 */
-#define PIOA_MDDR_INIT (u32)0xFBFE19FF
+#define PIOA_MDDR_INIT (u32)0xFBFFE9FF
 /* 
     31 [1] PA_31_HEARTBEAT not open drain
     30 [1] PA_30_AN_DEMO not open drain
@@ -1301,12 +1307,12 @@ Initial output values are stored here.
     19 [1] PA_19_DEBUG_U0_PIMO not open drain
     18 [1] PA_18_DEBUG_U0_POMI not open drain
     17 [1] PA_17_BUTTON0 not open drain
-    16 [0] PA_16_BLADE_CS 
+    16 [1] PA_16_BLADE_CS not open drain
 
-    15 [0] PA_15_BLADE_SCK 
-    14 [0] PA_14_BLADE_MOSI
-    13 [0] PA_13_BLADE_MISO
-    12 [1] PA_12_BLADE_UPOMI not open drain
+    15 [1] PA_15_BLADE_SCK not open drain
+    14 [1] PA_14_BLADE_MOSI not open drain
+    13 [1] PA_13_BLADE_MISO not open drain
+    12 [0] PA_12_BLADE_UPOMI 
 
     11 [1] PA_11_BLADE_UPIMO not open drain
     10 [0] PA_10_I2C_SCL
@@ -1324,7 +1330,7 @@ Initial output values are stored here.
     00 [1] PA_00_TP54 not open drain
 */
 
-#define PIOB_MDDR_INIT (u32)0x01FFFFF7
+#define PIOB_MDDR_INIT (u32)0x01FFFFFF
 /*
     31 [0] PB_31_
     30 [0] PB_30_
@@ -1361,7 +1367,7 @@ Initial output values are stored here.
     05 [1] PB_05_TP56 not open drain
     04 [1] PB_04_BLADE_AN1 not open drain
 
-    03 [0] PB_03_BLADE_AN0
+    03 [1] PB_03_BLADE_AN0 not open drain
     02 [1] PB_02_BUTTON3 not open drain
     01 [1] PB_01_BUTTON2 not open drain
     00 [1] PB_00_BUTTON1 not open drain
@@ -1595,7 +1601,7 @@ Initial output values are stored here.
     00 [0] PA_00_TP54 N/A
 */
 
-#define PIOB_ABSR_INIT (u32)0x00400010
+#define PIOB_ABSR_INIT (u32)0x00400018
 /*
     31 [0] PB_31_
     30 [0] PB_30_
@@ -1632,7 +1638,7 @@ Initial output values are stored here.
     05 [0] PB_05_TP56 N/A
     04 [1] PB_04_BLADE_AN1 PERIPHERAL B
 
-    03 [0] PB_03_BLADE_AN0 PERIPHERAL A
+    03 [1] PB_03_BLADE_AN0 PERIPHERAL B
     02 [0] PB_02_BUTTON3 N/A
     01 [0] PB_01_BUTTON2 N/A
     00 [0] PB_00_BUTTON1 N/A
@@ -1875,7 +1881,7 @@ Tdiv_slclk = 2*(DIV+1)*Tslow_clock.
 0: No effect
 1: Enables writing PIO_ODSR for the I/O line.
 */
-#define PIOA_OWER_INIT (u32)0xB401E000
+#define PIOA_OWER_INIT (u32)0xB4011000
 /* 
     31 [1] PA_31_HEARTBEAT write enabled
     30 [0] PA_30_AN_DEMO
@@ -1897,10 +1903,10 @@ Tdiv_slclk = 2*(DIV+1)*Tslow_clock.
     17 [0] PA_17_BUTTON0
     16 [1] PA_16_BLADE_CS write enabled
 
-    15 [1] PA_15_BLADE_SCK write enabled
-    14 [1] PA_14_BLADE_MOSI write enabled
-    13 [1] PA_13_BLADE_MISO write enabled
-    12 [0] PA_12_BLADE_UPOMI
+    15 [0] PA_15_BLADE_SCK
+    14 [0] PA_14_BLADE_MOSI 
+    13 [0] PA_13_BLADE_MISO
+    12 [1] PA_12_BLADE_UPOMI write enabled
 
     11 [0] PA_11_BLADE_UPIMO
     10 [0] PA_10_I2C_SCL 
@@ -1918,7 +1924,7 @@ Tdiv_slclk = 2*(DIV+1)*Tslow_clock.
     00 [0] PA_00_TP54
 */
 
-#define PIOB_OWER_INIT (u32)0x01FFFE8
+#define PIOB_OWER_INIT (u32)0x01FFFE0
 /*
     31 [0] PB_31_
     30 [0] PB_30_
@@ -1955,7 +1961,7 @@ Tdiv_slclk = 2*(DIV+1)*Tslow_clock.
     05 [0] PB_05_TP56
     04 [0] PB_04_BLADE_AN1
 
-    03 [1] PB_03_BLADE_AN0 write enabled
+    03 [0] PB_03_BLADE_AN0
     02 [0] PB_02_BUTTON3
     01 [0] PB_01_BUTTON2
     00 [0] PB_00_BUTTON1

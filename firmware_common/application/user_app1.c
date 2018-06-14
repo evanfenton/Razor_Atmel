@@ -194,10 +194,12 @@ static void AntSlaveConfig(void)
 
 static void Forward(void) // element 0 GREEN
 {
-  SignalOff(INPUT_TOP);
-  SignalOn(INPUT_BOT);
-  SignalOn(EN_LEFT);
-  SignalOn(EN_RIGHT);
+//  SignalOff(INPUT_TOP);
+//  SignalOn(INPUT_BOT);
+//  SignalOn(EN_LEFT);
+//  SignalOn(EN_RIGHT);
+  
+  SignalOn(PA_12_BLADE_UPOMI);
   
   LedOn(LCD_GREEN);
   LedOff(LCD_RED);
@@ -207,10 +209,10 @@ static void Forward(void) // element 0 GREEN
 
 static void Backward(void) // element 1 YELLOW
 {
-  SignalOn(INPUT_TOP);
-  SignalOff(INPUT_BOT);
-  SignalOn(EN_LEFT);
-  SignalOn(EN_RIGHT);
+//  SignalOn(INPUT_TOP);
+//  SignalOff(INPUT_BOT);
+//  SignalOn(EN_LEFT);
+//  SignalOn(EN_RIGHT);
   
   LedOn(LCD_RED);
   LedOn(LCD_GREEN);
@@ -220,10 +222,10 @@ static void Backward(void) // element 1 YELLOW
 
 static void LeftTurn(void) // element 2 PURPLE
 {
-  SignalOff(INPUT_TOP);
-  SignalOn(INPUT_BOT);
-  SignalOff(EN_LEFT);
-  SignalOn(EN_RIGHT);
+//  SignalOff(INPUT_TOP);
+//  SignalOn(INPUT_BOT);
+//  SignalOff(EN_LEFT);
+//  SignalOn(EN_RIGHT);
   
   LedOn(LCD_BLUE);
   LedOn(LCD_RED);
@@ -233,10 +235,10 @@ static void LeftTurn(void) // element 2 PURPLE
 
 static void RightTurn(void) // element 3 BLUE
 {
-  SignalOff(INPUT_TOP);
-  SignalOn(INPUT_BOT);
-  SignalOn(EN_LEFT);
-  SignalOff(EN_RIGHT);
+//  SignalOff(INPUT_TOP);
+//  SignalOn(INPUT_BOT);
+//  SignalOn(EN_LEFT);
+//  SignalOff(EN_RIGHT);
   
   LedOff(LCD_GREEN);
   LedOff(LCD_RED);
@@ -247,8 +249,10 @@ static void RightTurn(void) // element 3 BLUE
 static void Stalled(void) //no element RED
 {
   
-  SignalOff(EN_LEFT);
-  SignalOff(EN_RIGHT);
+//  SignalOff(EN_LEFT);
+//  SignalOff(EN_RIGHT);
+  
+  SignalOff(PA_12_BLADE_UPOMI);
   
   LedOff(LCD_GREEN);
   LedOff(LCD_BLUE);
@@ -258,12 +262,19 @@ static void Stalled(void) //no element RED
 
 static void SignalOn(u32 pin)
 {
-  AT91C_BASE_PIOA->PIO_SODR= pin;
+//  AT91C_BASE_PIOA->PIO_SODR= pin;
+  
+  u32 *pu32ToggleGPIO= (u32*)(&(AT91C_BASE_PIOA->PIO_SODR));
+  *pu32ToggleGPIO = pin;
+  
 }
 
 static void SignalOff(u32 pin)
 {
-  AT91C_BASE_PIOA->PIO_CODR= pin;
+//  AT91C_BASE_PIOA->PIO_CODR= pin;
+  
+  u32 *pu32ToggleGPIO= (u32*)(&(AT91C_BASE_PIOA->PIO_CODR));
+  *pu32ToggleGPIO = pin;
 }
 
 
