@@ -1012,7 +1012,7 @@ Default start-up IO values are held here.
 0: No effect
 1: Sets the data to be driven on the I/O line.
 */
-#define PIOA_SODR_INIT (u32)0x88007800
+#define PIOA_SODR_INIT (u32)0x88000000
 /* 
     31 [1] PA_31_HEARTBEAT output high 
     30 [0] PA_30_AN_DEMO N/A
@@ -1032,15 +1032,14 @@ Default start-up IO values are held here.
     19 [0] PA_19_DEBUG_U0_PIMO N/A
     18 [0] PA_18_DEBUG_U0_POMI N/A
     17 [0] PA_17_BUTTON0 N/A
-    16 [1] PA_16_BLADE_CS output high
+    16 [0] PA_16_BLADE_CS N/A
 
     15 [0] PA_15_BLADE_SCK N/A
-    14 [1] PA_14_BLADE_MOSI output high
-    13 [1] PA_13_BLADE_MISO output high
-    12 [1] PA_12_BLADE_UPOMI output high
+    14 [0] PA_14_BLADE_MOSI N/A
+    13 [0] PA_13_BLADE_MISO N/A
+    12 [0] PA_12_BLADE_UPOMI N/A
 
-    11 [1] PA_11_BLADE_UPIMO output high
-
+    11 [0] PA_11_BLADE_UPIMO N/A
     10 [0] PA_10_I2C_SCL N/A 
     09 [0] PA_09_I2C_SDA N/A
     08 [0] PA_08_SD_CS_MCDA3 N/A
