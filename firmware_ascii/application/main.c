@@ -70,8 +70,9 @@ void main(void)
   SdCardInitialize();
 
   /* Application initialization */
-
-  UserApp1Initialize();
+  
+  ANTRCC_CInitialize();
+  //UserApp1Initialize();
   //UserApp2Initialize();
   //UserApp3Initialize();
 
@@ -101,7 +102,8 @@ void main(void)
     SdCardRunActiveState();
 
     /* Applications */
-    UserApp1RunActiveState();
+    ANTRCC_CRunActiveState();
+    //UserApp1RunActiveState();
     //UserApp2RunActiveState();
     //UserApp3RunActiveState();
     

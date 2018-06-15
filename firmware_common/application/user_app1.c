@@ -52,32 +52,13 @@ extern volatile u32 G_u32ApplicationFlags;             /* From main.c */
 extern volatile u32 G_u32SystemTime1ms;                /* From board-specific source file */
 extern volatile u32 G_u32SystemTime1s;                 /* From board-specific source file */
 
-extern u32 G_u32AntApiCurrentMessageTimeStamp;                            // From ant_api.c
-extern AntApplicationMessageType G_eAntApiCurrentMessageClass;            // From ant_api.c
-extern u8 G_au8AntApiCurrentMessageBytes[ANT_APPLICATION_MESSAGE_BYTES];  // From ant_api.c
-extern AntExtendedDataType G_sAntApiCurrentMessageExtData;                // From ant_api.c
 
 /***********************************************************************************************************************
 Global variable definitions with scope limited to this local application.
 Variable names shall start with "UserApp1_" and be declared as static.
 ***********************************************************************************************************************/
 static fnCode_type UserApp1_StateMachine;            /* The state machine function pointer */
-static u32 UserApp1_u32Timeout = 0;                      /* Timeout counter used across states */
-
-static u8 u8DirectionMsg[ANT_DATA_BYTES]= { 0x00, 0x00, 0x00, 0x00, 0xA5, 0x00, 0x00, 0x00 };
-/* last byte= 0x00 for STALLED
-              0x01 for FORWARD
-              0x02 for BACKWARD
-              0x03 for LEFT
-              0x04 for RIGHT */
-
-
-/******GLOBALS******/
-static bool bLoad = TRUE;
-static u32 u32Timer = 0;
-
-AntAssignChannelInfoType sChannelInfo;
-
+//static u32 UserApp1_u32Timeout = 0;                      /* Timeout counter used across states */
 
 /**********************************************************************************************************************
 Function Definitions
@@ -105,15 +86,14 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
-  LCDCommand(LCD_CLEAR_CMD);
-  
-  for(u32 u32I = 0; u32I < 10000; u32I++);
-  
-  LCDMessage(LINE1_START_ADDR, "Press Button 0 to");
-  LCDMessage(LINE2_START_ADDR, "connect to RC car");
-  
-  UserApp1_StateMachine = UserApp1SM_Master_or_Slave;
- 
+  if(1)
+  {
+    UserApp1_StateMachine = UserApp1SM_Idle;
+  }
+  else
+  {
+    UserApp1_StateMachine = UserApp1SM_Error;
+  }
 } /* end UserApp1Initialize() */
 
   
@@ -140,289 +120,17 @@ void UserApp1RunActiveState(void)
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Private functions                                                                                                  */
 /*--------------------------------------------------------------------------------------------------------------------*/
-static void LEDLoading(void)
-{
-  while(u32Timer < 350000)
-  {
-    u32Timer++;
-    if(u32Timer < 50000)
-    {
-      LedOn(RED);
-    }
-    if(u32Timer > 50000 && u32Timer < 100000)
-    {
-      LedOn(ORANGE);
-    }
-    if(u32Timer > 100000 && u32Timer < 150000)
-    {
-      LedOn(YELLOW);
-    }
-    if(u32Timer > 150000 && u32Timer < 220000)
-    {
-      LedOn(GREEN);
-    }
-    if(u32Timer > 220000 && u32Timer < 280000)
-    {
-      LedOn(BLUE);
-      LedOff(RED);
-      LedOff(ORANGE);
-      LedOff(YELLOW);
-      LedOff(GREEN);
-    }
-    if(u32Timer > 28000)
-    {
-      LedOff(BLUE);
-      bLoad = FALSE;
-    }
-  }
-}
-
-
-/* ANT FUNCTIONS */
-static void AntInit(void)
-{
-  sChannelInfo.AntChannel          = ANT_CHANNEL_USERAPP;
-  sChannelInfo.AntChannelPeriodLo  = ANT_CHANNEL_PERIOD_LO_USERAPP;
-  sChannelInfo.AntChannelPeriodHi  = ANT_CHANNEL_PERIOD_HI_USERAPP;
-  sChannelInfo.AntDeviceIdLo       = ANT_DEVICEID_LO_USERAPP;
-  sChannelInfo.AntDeviceIdHi       = ANT_DEVICEID_HI_USERAPP;
-  sChannelInfo.AntDeviceType       = ANT_DEVICE_TYPE_USERAPP;
-  sChannelInfo.AntTransmissionType = ANT_TRANSMISSION_TYPE_USERAPP;
-  sChannelInfo.AntFrequency        = ANT_FREQUENCY_USERAPP;
-  sChannelInfo.AntTxPower          = ANT_TX_POWER_USERAPP;
-  sChannelInfo.AntNetwork          = ANT_NETWORK_DEFAULT;
-  sChannelInfo.AntFlags            = 1;
-  
-  for(u8 i = 0; i < ANT_NETWORK_NUMBER_BYTES; i++)
-  {
-    sChannelInfo.AntNetworkKey[i] = ANT_DEFAULT_NETWORK_KEY;
-  }
-}
-
-static void AntMasterConfig(void)
-{
-  AntInit();
-  sChannelInfo.AntChannelType = CHANNEL_TYPE_MASTER;
-  if(AntAssignChannel(&sChannelInfo))
-  {
-    UserApp1_u32Timeout++;
-    UserApp1_StateMachine = UserApp1SM_ANT_ChannelAssign;
-    
-    if(AntRadioStatusChannel(ANT_CHANNEL_USERAPP) == ANT_CONFIGURED)
-    {
-      AntOpenChannelNumber(ANT_CHANNEL_USERAPP);
-      UserApp1_StateMachine = UserApp1SM_Idle;
-    }
-    if(UserApp1_u32Timeout == 5000)
-    {
-      LedBlink(RED, LED_4HZ);
-      UserApp1_StateMachine = UserApp1SM_Error;
-    }
-  }
-  else
-  {
-    LedOn(RED);
-    UserApp1_StateMachine = UserApp1SM_Error;
-  }
-}
-
-/* DIRECTION FUNCTIONS */
-
-static void Forward(void)
-{
-  LedOn(GREEN);
-  LedOff(RED);
-  LedOff(YELLOW);
-  LedOff(PURPLE);
-  LedOff(BLUE);
-  u8DirectionMsg[0]= 0xFF;
-  u8DirectionMsg[1]= 0x00;
-  u8DirectionMsg[2]= 0x00;
-  u8DirectionMsg[3]= 0x00;
-}
-
-static void Backward(void)
-{
-  LedOn(YELLOW);
-  LedOff(RED);
-  LedOff(GREEN);
-  LedOff(PURPLE);
-  LedOff(BLUE);
-  u8DirectionMsg[0]= 0x00;
-  u8DirectionMsg[1]= 0xFF;
-  u8DirectionMsg[2]= 0x00;
-  u8DirectionMsg[3]= 0x00;
-}
-
-static void ForwardLeft(void)
-{
-  LedOn(GREEN);
-  LedOff(RED);
-  LedOff(YELLOW);
-  LedOn(PURPLE);
-  LedOff(BLUE);
-  u8DirectionMsg[0]= 0xFF;
-  u8DirectionMsg[1]= 0x00;
-  u8DirectionMsg[2]= 0xFF;
-  u8DirectionMsg[3]= 0x00;
-}
-
-static void BackwardLeft(void)
-{
-  LedOff(GREEN);
-  LedOff(RED);
-  LedOn(YELLOW);
-  LedOn(PURPLE);
-  LedOff(BLUE);
-  u8DirectionMsg[0]= 0x00;
-  u8DirectionMsg[1]= 0xFF;
-  u8DirectionMsg[2]= 0xFF;
-  u8DirectionMsg[3]= 0x00;
-}
-
-static void LeftTurn(void)
-{
-  
-  LedOn(PURPLE);
-  LedOff(RED);
-  LedOff(GREEN);
-  LedOff(BLUE);
-  LedOff(YELLOW);
-  u8DirectionMsg[0]= 0x00;
-  u8DirectionMsg[1]= 0x00;
-  u8DirectionMsg[2]= 0xFF;
-  u8DirectionMsg[3]= 0x00;
-}
-
-static void RightTurn(void)
-{
-  LedOn(BLUE);
-  LedOff(YELLOW);
-  LedOff(GREEN);
-  LedOff(RED);
-  LedOff(PURPLE);
-  u8DirectionMsg[0]= 0x00;
-  u8DirectionMsg[1]= 0x00;
-  u8DirectionMsg[2]= 0x00;
-  u8DirectionMsg[3]= 0xFF;
-}
-
-static void ForwardRight(void)
-{
-  LedOn(GREEN);
-  LedOff(RED);
-  LedOff(YELLOW);
-  LedOff(PURPLE);
-  LedOn(BLUE);
-  u8DirectionMsg[0]= 0xFF;
-  u8DirectionMsg[1]= 0x00;
-  u8DirectionMsg[2]= 0x00;
-  u8DirectionMsg[3]= 0xFF;
-}
-
-static void BackwardRight(void)
-{
-  LedOff(GREEN);
-  LedOff(RED);
-  LedOn(YELLOW);
-  LedOff(PURPLE);
-  LedOn(BLUE);
-  u8DirectionMsg[0]= 0x00;
-  u8DirectionMsg[1]= 0xFF;
-  u8DirectionMsg[2]= 0x00;
-  u8DirectionMsg[3]= 0xFF;
-}
-
-static void Stalled(void)
-{
-  LedOff(PURPLE);
-  LedOff(GREEN);
-  LedOff(YELLOW);
-  LedOff(BLUE);
-  LedOn(RED);
-  u8DirectionMsg[0]= 0x00;
-  u8DirectionMsg[1]= 0x00;
-  u8DirectionMsg[2]= 0x00;
-  u8DirectionMsg[3]= 0x00;
-}
 
 /**********************************************************************************************************************
 State Machine Function Definitions
 **********************************************************************************************************************/
-static void UserApp1SM_Master_or_Slave(void)
-{
-  if(WasButtonPressed(BUTTON0))
-  {
-    ButtonAcknowledge(BUTTON0);
-    AntMasterConfig();
-  }
-}
-
-static void UserApp1SM_ANT_ChannelAssign(void)
-{
-  if(AntRadioStatusChannel(ANT_CHANNEL_USERAPP) == ANT_CONFIGURED)
-  {
-    bLoad = TRUE;
-    AntOpenChannelNumber(ANT_CHANNEL_USERAPP);
-    LCDCommand(LCD_CLEAR_CMD);
-    for(u32 i = 0; i < 10000; i++);
-    LCDMessage(LINE2_START_ADDR, "^     v      <     >");  
-    UserApp1_StateMachine = UserApp1SM_Idle;
-  }
-  UserApp1_u32Timeout++;
-  if(UserApp1_u32Timeout == 5000)
-  {
-    LedBlink(RED, LED_2HZ);
-    UserApp1_StateMachine = UserApp1SM_Error;
-  }
-} /* end UserApp1SM_ChannelAssign() */
-
 
 
 /*-------------------------------------------------------------------------------------------------------------------*/
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
-  if(IsButtonPressed(BUTTON0) && IsButtonPressed(BUTTON2))
-  {
-    ForwardLeft();
-  }
-  else if(IsButtonPressed(BUTTON0) && IsButtonPressed(BUTTON3))
-  {
-    ForwardRight();
-  }
-  else if(IsButtonPressed(BUTTON0))
-  {
-    Forward();
-  }
-  else if(IsButtonPressed(BUTTON1) && IsButtonPressed(BUTTON2))
-  {
-    BackwardLeft();
-  }
-  else if(IsButtonPressed(BUTTON1) && IsButtonPressed(BUTTON3))
-  {
-    BackwardRight();
-  }
-  else if(IsButtonPressed(BUTTON1))
-  {
-    Backward();
-  }
-  else if(IsButtonPressed(BUTTON2))
-  {
-    LeftTurn();
-  }
-  else if(IsButtonPressed(BUTTON3))
-  {
-    RightTurn();
-  }
-  else
-  {
-    Stalled();
-  }
-  if( AntReadAppMessageBuffer() )
-  {
-    AntQueueBroadcastMessage(ANT_CHANNEL_USERAPP, u8DirectionMsg);
-  }
+
 } /* end UserApp1SM_Idle() */
     
 
