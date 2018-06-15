@@ -9,7 +9,7 @@ TriggerName=main
 LimitSize=0
 ByteLimit=50
 [DebugChecksum]
-Checksum=-1485446263
+Checksum=1872469629
 [Exceptions]
 StopOnUncaught=_ 0
 StopOnThrow=_ 0
@@ -48,6 +48,9 @@ Stop=1
 [Simulator]
 Freq=10000000
 MultiCoreRunAll=1
+[Trace1]
+Enabled=0
+ShowSource=1
 [Disassemble mode]
 mode=0
 [Breakpoints2]
@@ -60,13 +63,14 @@ Category=_ 0
 LoggingEnabled=_ 0
 LogFile=_ ""
 [Aliases]
-Count=0
-SuppressDialog=0
+A0=_ "C:\Users\ENGENUICS5\Desktop\Summer Camp Git\Razor_Atmel\firmware_ascii\drivers\sdcard.c" "C:\Users\ENGENUICS5\Desktop\SCRCC_Git\Razor_Atmel\firmware_ascii\drivers\sdcard.c"
+Count=1
+SuppressDialog=1
 [CallStackLog]
 Enabled=0
 [DriverProfiling]
 Enabled=0
-Mode=0
+Mode=1
 Graph=0
 Symbiont=0
 Exclusions=
