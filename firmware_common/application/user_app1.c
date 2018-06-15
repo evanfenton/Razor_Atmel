@@ -160,10 +160,7 @@ static void AntInit(void)
   sChannelInfo.AntFrequency        = ANT_FREQUENCY_USERAPP;
   sChannelInfo.AntTxPower          = ANT_TX_POWER_USERAPP;
   sChannelInfo.AntNetwork          = ANT_NETWORK_DEFAULT;
-  
-  /**************************************/
   sChannelInfo.AntFlags            = 1;
-  /**************************************/
   
   for(u8 i = 0; i < ANT_NETWORK_NUMBER_BYTES; i++)
   {
@@ -226,18 +223,13 @@ static void Forward(void) // element 0 GREEN
   SignalOn(EN_RIGHT);
 }
 
-
-
 static void Backward(void) // element 1 YELLOW
 {
   SignalOn(INPUT_TOP);
   SignalOff(INPUT_BOT);
   SignalOn(EN_LEFT);
   SignalOn(EN_RIGHT);
-
-  
 }
-
 
 static void Left(void) // element 2 PURPLE
 {
@@ -245,10 +237,7 @@ static void Left(void) // element 2 PURPLE
   SignalOn(INPUT_BOT);
   SignalOff(EN_LEFT);
   SignalOn(EN_RIGHT);
-  
-  
 }
-
 
 static void Right(void) // element 3 BLUE
 {
@@ -256,9 +245,7 @@ static void Right(void) // element 3 BLUE
   SignalOn(INPUT_BOT);
   SignalOn(EN_LEFT);
   SignalOff(EN_RIGHT);
-  
 }
-
 
 static void Stalled(void) //no element RED
 {
@@ -266,10 +253,6 @@ static void Stalled(void) //no element RED
   SignalOff(INPUT_BOT);
   SignalOff(EN_LEFT);
   SignalOff(EN_RIGHT);
-  
-  LedOff(LCD_GREEN);
-  LedOff(LCD_BLUE);
-  LedOn(LCD_RED);
 }
 
 
@@ -279,11 +262,11 @@ static void Forward_Left(void)
 {
   FL_counter++;
   
-  if(FL_counter < 10)
+  if(FL_counter < FIRST_DIR_RATE)
   {
     Forward();
   }
-  else if(FL_counter < 20)
+  else if(FL_counter < SEC_DIR_RATE)
   {
     Left();
   }
@@ -299,11 +282,11 @@ static void Forward_Right(void)
   
   FR_counter++;
   
-  if(FR_counter < 10)
+  if(FR_counter < FIRST_DIR_RATE)
   {
     Forward();
   }
-  else if(FR_counter < 20)
+  else if(FR_counter < SEC_DIR_RATE)
   {
     Right();
   }
@@ -319,11 +302,11 @@ static void Backward_Left(void)
   
   BL_counter++;
   
-  if(BL_counter < 10)
+  if(BL_counter < FIRST_DIR_RATE)
   {
     Backward();
   }
-  else if(BL_counter < 20)
+  else if(BL_counter < SEC_DIR_RATE)
   {
     Backward();
     SignalOff(EN_LEFT);
@@ -340,11 +323,11 @@ static void Backward_Right(void)
   
   BR_counter++;
   
-  if(BR_counter < 10)
+  if(BR_counter < FIRST_DIR_RATE)
   {
     Backward();
   }
-  else if(BR_counter < 20)
+  else if(BR_counter < SEC_DIR_RATE)
   {
     Backward();
     SignalOff(EN_RIGHT);
@@ -479,6 +462,9 @@ static void UserApp1SM_Idle(void)
   else
   {
     //STALLED
+    LedOff(LCD_GREEN);
+    LedOff(LCD_BLUE);
+    LedOn(LCD_RED);
     Stalled();
   }
   

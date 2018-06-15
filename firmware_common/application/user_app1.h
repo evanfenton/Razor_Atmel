@@ -44,8 +44,11 @@ Constants / Definitions
 #define INPUT_TOP                       PA_12_BLADE_UPOMI /* TX */
 #define INPUT_BOT                       PA_11_BLADE_UPIMO /* RX */
 
-#define EN_LEFT                         PA_13_BLADE_MISO
-#define EN_RIGHT                        PA_14_BLADE_MOSI
+#define EN_LEFT                         PA_13_BLADE_MISO /* MISO */
+#define EN_RIGHT                        PA_14_BLADE_MOSI /* MOSI */
+
+#define FIRST_DIR_RATE                  (u8)30
+#define SEC_DIR_RATE                    (u8)50
 
 /**********************************************************************************************************************
 Function Declarations
