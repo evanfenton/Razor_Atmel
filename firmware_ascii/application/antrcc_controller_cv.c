@@ -1,5 +1,21 @@
 /**********************************************************************************************************************
-File: ANTRCC_C.c                                                                
+File: antrcc_controller_cv.c      
+
+Description:
+A file for enGENIUS camp participants to write their RC Car Controller code
+(code for responding to user input and sending the appropriate messages to the receiver)
+
+YOU WILL BE WRITING THE EVENT HANDLING LOGIC FOR THE CONTROLLER
+
+IN OUR CASE THE "EVENT" IS THE USERS INPUT WHICH IS GOING TO BE BUTTON PRESSING
+
+BELOW IS A REFERENCE TO THE FUNCTIONS YOU'LL NEED TO CALL 
+
+WHEN YOU ARE READY TO START GO TO LINE ___
+
+
+
+
 ***********************************************************************************************************************/
 
 #include "configuration.h"
