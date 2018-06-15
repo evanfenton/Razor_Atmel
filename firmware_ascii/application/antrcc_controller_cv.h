@@ -66,6 +66,8 @@ static void ANTRCC_C_AntInit(void);
 static void ANTRCC_C_AntMasterConfig(void);
 static void ANTRCC_C_AntSendDirections(void);
 
+void SendDirections(void);
+
 /* Engenuics Standard Functions */
 static void ANTRCC_C_Forward(void);
 static void ANTRCC_C_Backward(void);
@@ -87,7 +89,7 @@ void ForwardLeft(void);
 void ForwardRight(void);
 void BackwardLeft(void);
 void BackwardRight(void);
-void SendDirections(void);
+
 
 /***********************************************************************************************************************
 State Machine Declarations
