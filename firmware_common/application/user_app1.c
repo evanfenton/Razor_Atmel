@@ -63,13 +63,6 @@ Variable names shall start with "UserApp1_" and be declared as static.
 ***********************************************************************************************************************/
 static fnCode_type UserApp1_StateMachine;            /* The state machine function pointer */
 static u32 UserApp1_u32Timeout = 0;                      /* Timeout counter used across states */
-/*
-static u8 u8StalledMsg[ANT_DATA_BYTES]= { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,     0x00 };
-static u8 u8ForwardMsg[ANT_DATA_BYTES]= { 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,     0x01 };
-static u8 u8BackwardMsg[ANT_DATA_BYTES]= { 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02,    0x02 };
-static u8 u8LeftTurnMsg[ANT_DATA_BYTES]= { 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03,    0x03 };
-static u8 u8RightTurnMsg[ANT_DATA_BYTES]= { 0x04, 0x04, 0x04, 0x04, 0x04, 0x04, 0x04,   0x04 };
-*/
 
 static u8 u8DirectionMsg[ANT_DATA_BYTES]= { 0x00, 0x00, 0x00, 0x00, 0xA5, 0x00, 0x00, 0x00 };
 /* last byte= 0x00 for STALLED
@@ -78,12 +71,6 @@ static u8 u8DirectionMsg[ANT_DATA_BYTES]= { 0x00, 0x00, 0x00, 0x00, 0xA5, 0x00, 
               0x03 for LEFT
               0x04 for RIGHT */
 
-/*
-static u8 u8ForwardLCDMsg[]= "Going Forward";
-static u8 u8BackwardLCDMsg[]= "Going Backward";
-static u8 u8LeftLCDMsg[]= "Turning Left";
-static u8 u8RightLCDMsg[]= "Turning Right";
-*/
 
 /******GLOBALS******/
 static bool bLoad = TRUE;
@@ -147,7 +134,6 @@ Promises:
 void UserApp1RunActiveState(void)
 {
   UserApp1_StateMachine();
-
 } /* end UserApp1RunActiveState */
 
 
@@ -205,10 +191,7 @@ static void AntInit(void)
   sChannelInfo.AntFrequency        = ANT_FREQUENCY_USERAPP;
   sChannelInfo.AntTxPower          = ANT_TX_POWER_USERAPP;
   sChannelInfo.AntNetwork          = ANT_NETWORK_DEFAULT;
-  
-  /**************************************/
   sChannelInfo.AntFlags            = 1;
-  /**************************************/
   
   for(u8 i = 0; i < ANT_NETWORK_NUMBER_BYTES; i++)
   {
@@ -400,54 +383,46 @@ static void UserApp1SM_ANT_ChannelAssign(void)
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
-  if(bLoad)
+  if(IsButtonPressed(BUTTON0) && IsButtonPressed(BUTTON2))
   {
-    LEDLoading();
+    ForwardLeft();
+  }
+  else if(IsButtonPressed(BUTTON0) && IsButtonPressed(BUTTON3))
+  {
+    ForwardRight();
+  }
+  else if(IsButtonPressed(BUTTON0))
+  {
+    Forward();
+  }
+  else if(IsButtonPressed(BUTTON1) && IsButtonPressed(BUTTON2))
+  {
+    BackwardLeft();
+  }
+  else if(IsButtonPressed(BUTTON1) && IsButtonPressed(BUTTON3))
+  {
+    BackwardRight();
+  }
+  else if(IsButtonPressed(BUTTON1))
+  {
+    Backward();
+  }
+  else if(IsButtonPressed(BUTTON2))
+  {
+    LeftTurn();
+  }
+  else if(IsButtonPressed(BUTTON3))
+  {
+    RightTurn();
   }
   else
   {
-    if(IsButtonPressed(BUTTON0) && IsButtonPressed(BUTTON2))
-    {
-      ForwardLeft();
-    }
-    else if(IsButtonPressed(BUTTON0) && IsButtonPressed(BUTTON3))
-    {
-      ForwardRight();
-    }
-    else if(IsButtonPressed(BUTTON0))
-    {
-      Forward();
-    }
-    else if(IsButtonPressed(BUTTON1) && IsButtonPressed(BUTTON2))
-    {
-      BackwardLeft();
-    }
-    else if(IsButtonPressed(BUTTON1) && IsButtonPressed(BUTTON3))
-    {
-      BackwardRight();
-    }
-    else if(IsButtonPressed(BUTTON1))
-    {
-      Backward();
-    }
-    else if(IsButtonPressed(BUTTON2))
-    {
-      LeftTurn();
-    }
-    else if(IsButtonPressed(BUTTON3))
-    {
-      RightTurn();
-    }
-    else
-    {
-      Stalled();
-    }
-    if( AntReadAppMessageBuffer() )
-    {
-      AntQueueBroadcastMessage(ANT_CHANNEL_USERAPP, u8DirectionMsg);
-    }
+    Stalled();
   }
-  
+  if( AntReadAppMessageBuffer() )
+  {
+    AntQueueBroadcastMessage(ANT_CHANNEL_USERAPP, u8DirectionMsg);
+  }
 } /* end UserApp1SM_Idle() */
     
 
