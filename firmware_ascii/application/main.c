@@ -20,6 +20,8 @@ volatile u32 G_u32ApplicationFlags = 0;                /* Global applications fl
 extern volatile u32 G_u32SystemTime1ms;                /* From board-specific source file */
 extern volatile u32 G_u32SystemTime1s;                 /* From board-specific source file */
 
+extern volatile fnCode_type Controller_StateMachine;   /* The application state machine function pointer */
+
 
 /***********************************************************************************************************************
 Global variable definitions with scope limited to this local application.
@@ -71,7 +73,7 @@ void main(void)
 
   /* Application initialization */
   
-  ANTRCC_CInitialize();
+  Controller_Initialize();
   //UserApp1Initialize();
   //UserApp2Initialize();
   //UserApp3Initialize();
@@ -102,7 +104,9 @@ void main(void)
     SdCardRunActiveState();
 
     /* Applications */
-    ANTRCC_CRunActiveState();
+    
+    Controller_StateMachine();
+    
     //UserApp1RunActiveState();
     //UserApp2RunActiveState();
     //UserApp3RunActiveState();

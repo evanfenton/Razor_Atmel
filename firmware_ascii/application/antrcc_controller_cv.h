@@ -1,19 +1,10 @@
 /**********************************************************************************************************************
-File: user_app1.h                                                                
-
-----------------------------------------------------------------------------------------------------------------------
-To start a new task using this user_app1 as a template:
-1. Follow the instructions at the top of user_app1.c
-2. Use ctrl-h to find and replace all instances of "user_app1" with "yournewtaskname"
-3. Use ctrl-h to find and replace all instances of "ANTRCC_C" with "YourNewTaskName"
-4. Use ctrl-h to find and replace all instances of "USER_APP1" with "YOUR_NEW_TASK_NAME"
-5. Add #include yournewtaskname.h" to configuration.h
-6. Add/update any special configurations required in configuration.h (e.g. peripheral assignment and setup values)
-7. Delete this text (between the dashed lines)
-----------------------------------------------------------------------------------------------------------------------
+File: antrcc_controller_cv.h      
 
 Description:
-Header file for user_app1.c
+
+Header file for antrcc_controller_cv.c
+
 
 **********************************************************************************************************************/
 
@@ -54,50 +45,42 @@ Function Declarations
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Protected functions                                                                                                */
 /*--------------------------------------------------------------------------------------------------------------------*/
-void ANTRCC_CInitialize(void);
-void ANTRCC_CRunActiveState(void);
 
+void Controller_Initialize(void);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Private functions                                                                                                  */
 /*--------------------------------------------------------------------------------------------------------------------*/
+
 /* ANT Functions */
-static void ANTRCC_C_AntInit(void);
-static void ANTRCC_C_AntMasterConfig(void);
-static void ANTRCC_C_AntSendDirections(void);
 
-void SendDirections(void);
+static void ANT_Initialize(void);
+static void ANT_SendDirection(void);
 
-/* Engenuics Standard Functions */
-static void ANTRCC_C_Forward(void);
-static void ANTRCC_C_Backward(void);
-static void ANTRCC_C_ForwardLeft(void);
-static void ANTRCC_C_BackwardLeft(void);
-static void ANTRCC_C_LeftTurn(void);
-static void ANTRCC_C_RightTurn(void);
-static void ANTRCC_C_ForwardRight(void);
-static void ANTRCC_C_BackwardRight(void);
-static void ANTRCC_C_Stalled(void);
 
-/* CV Functions */
-void Forward(void);
-void Backward(void);
-void Left(void);
-void Right(void);
-void Stop(void);
-void ForwardLeft(void);
-void ForwardRight(void);
-void BackwardLeft(void);
-void BackwardRight(void);
+/* Direction Functions */
+
+static void Forward(void);
+static void Backward(void);
+static void Left(void);
+static void Right(void);
+
+static void Stalled(void);
+
+static void Forward_Left(void);
+static void Forward_Right(void);
+static void Backward_Left(void);
+static void Backward_Right(void);
 
 
 /***********************************************************************************************************************
 State Machine Declarations
 ***********************************************************************************************************************/
-static void ANTRCC_CSM_SendData(void);    
-static void ANTRCC_CSM_ANT_ChannelAssign(void);
-static void ANTRCC_CSM_Error(void);         
-static void ANTRCC_CSM_MasterConfig(void);
+
+static void Controller_Active(void);
+static void Controller_Error(void);
+static void ANT_Startup(void);
+static void ANT_ChannelAssign(void);
 
 
 #endif /* __ANTRCC_C_H */
