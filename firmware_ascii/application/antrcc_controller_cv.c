@@ -11,7 +11,7 @@ IN OUR CASE THE "EVENT" IS THE USERS INPUT WHICH IS GOING TO BE BUTTON PRESSING
 
 BELOW IS A REFERENCE TO THE FUNCTIONS YOU'LL NEED TO CALL 
 
-WHEN YOU ARE READY TO START GO TO LINE ___
+WHEN YOU ARE READY TO START GO TO LINE 121
 
 ***********************************************************************************************************************
 
