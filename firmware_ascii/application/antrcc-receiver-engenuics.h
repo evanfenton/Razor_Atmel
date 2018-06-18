@@ -6,6 +6,7 @@ File: antrcc-receiver-engenuics.h
 Description:
 Header file for antrcc-receiver-engenuics.c  
 
+
 **********************************************************************************************************************/
 
 #ifndef __ANTRCC_R_H
@@ -21,6 +22,7 @@ Constants / Definitions
 **********************************************************************************************************************/
 
 /* Required constants for ANT channel configuration */
+
 #define ANT_CHANNEL_USERAPP             ANT_CHANNEL_0         // Channel 0 - 7
 #define ANT_CHANNEL_PERIOD_LO_USERAPP   (u8)0x66              // LO; 0x0001 - 0x7fff
 #define ANT_CHANNEL_PERIOD_HI_USERAPP   (u8)0x06              // HI; 0x0001 - 0x7fff
@@ -32,11 +34,16 @@ Constants / Definitions
 #define ANT_TX_POWER_USERAPP            RADIO_TX_POWER_4DBM   // Max tx power
 
 
+/* signal names */
+
 #define DIR_REV                         PA_12_BLADE_UPOMI /* TX */
 #define DIR_FWD                         PA_11_BLADE_UPIMO /* RX */
 
 #define EN_LEFT                         PA_13_BLADE_MISO /* MISO */
 #define EN_RIGHT                        PA_14_BLADE_MOSI /* MOSI */
+
+
+/* durations for combination directions */
 
 #define FIRST_DIR_RATE                  (u8)30
 #define SEC_DIR_RATE                    (u8)50
@@ -53,45 +60,58 @@ Function Declarations
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Protected functions                                                                                                */
 /*--------------------------------------------------------------------------------------------------------------------*/
-void UserApp1Initialize(void);
-void UserApp1RunActiveState(void);
+
+void ANTRCC_R_Initialize(void);
+
+void ANTRCC_R_RunActiveState(void);
 
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Private functions                                                                                                  */
 /*--------------------------------------------------------------------------------------------------------------------*/
-static void AntInit(void);
-static void AntSlaveConfig(void);
-static void AntReadMessage(void);
 
-/* Directions */
-static void Forward(void);
-static void Backward(void);
-static void Left(void);
-static void Right(void);
-static void Stalled(void);
+static void ANTRCC_R_AntInitialize(void);
 
-/* Combinations */
-static void Forward_Left(void);
-static void Forward_Right(void);
+static void ANTRCC_R_AntReadMessage(void);
 
-static void Backward_Left(void);
-static void Backward_Right(void);
+static void ANTRCC_R_Forward(void);
 
-static void CombinationLCD(void);
+static void ANTRCC_R_Backward(void);
 
-/* Pin Signals */
-static void SignalOn(u32 pin);
-static void SignalOff(u32 pin);
+static void ANTRCC_R_LeftTurn(void);
+
+static void ANTRCC_R_RightTurn(void);
+
+
+static void ANTRCC_R_ForwardLeft(void);
+
+static void ANTRCC_R_ForwardRight(void);
+
+static void ANTRCC_R_BackwardLeft(void);
+
+static void ANTRCC_R_BackwardRight(void);
+
+
+static void ANTRCC_R_ColorLCD(bool Red, bool Green, bool Blue);
+
+
+static void ANTRCC_R_SignalOn(u32 pin);
+
+static void ANTRCC_R_SignalOff(u32 pin);
 
 /***********************************************************************************************************************
 State Machine Declarations
 ***********************************************************************************************************************/
-static void UserApp1SM_Idle(void);    
-static void UserApp1SM_ANT_ChannelAssign(void);
-static void UserApp1SM_Error(void);         
-static void UserApp1SM_Master_or_Slave(void);
 
+static void ANTRCC_RSM_RobotActive(void);
+
+static void ANTRCC_RSM_RobotStalled(void);
+
+static void ANTRCC_RSM_AntCommInterupt(void);
+
+static void ANTRCC_RSM_AntChannelAssign(void);
+
+static void ANTRCC_RSM_AntStartup(void);
 
 #endif /* __ANTRCC_R_H */
 
