@@ -540,7 +540,7 @@ static void ANTRCC_C_BackwardRight(void)
   LedOff(PURPLE);
   LedOn(BLUE);
   
-  ANTRCC_C_MessageBytes(FALSE, FALSE, TRUE, TRUE);
+  ANTRCC_C_MessageBytes(FALSE, TRUE, FALSE, TRUE);
 
 } /* end ANTRCC_C_BackwardRight() */
 
