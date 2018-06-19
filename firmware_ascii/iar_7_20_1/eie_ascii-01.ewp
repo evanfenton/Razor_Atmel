@@ -2047,7 +2047,7 @@
     <group>
       <name>Include</name>
       <file>
-        <name>$PROJ_DIR$\..\application\antrcc_controller_cv.h</name>
+        <name>$PROJ_DIR$\..\application\antrcc_controller_engenuics.h</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\firmware_common\application\debug.h</name>
@@ -2071,7 +2071,7 @@
     <group>
       <name>Source</name>
       <file>
-        <name>$PROJ_DIR$\..\application\antrcc_controller_cv.c</name>
+        <name>$PROJ_DIR$\..\application\antrcc_controller_engenuics.c</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\firmware_common\application\debug.c</name>

@@ -1,19 +1,10 @@
 /**********************************************************************************************************************
-File: user_app1.h                                                                
+File: antrcc_controller_engenuics.h                                                                
 
-----------------------------------------------------------------------------------------------------------------------
-To start a new task using this user_app1 as a template:
-1. Follow the instructions at the top of user_app1.c
-2. Use ctrl-h to find and replace all instances of "user_app1" with "yournewtaskname"
-3. Use ctrl-h to find and replace all instances of "ANTRCC_C" with "YourNewTaskName"
-4. Use ctrl-h to find and replace all instances of "USER_APP1" with "YOUR_NEW_TASK_NAME"
-5. Add #include yournewtaskname.h" to configuration.h
-6. Add/update any special configurations required in configuration.h (e.g. peripheral assignment and setup values)
-7. Delete this text (between the dashed lines)
 ----------------------------------------------------------------------------------------------------------------------
 
 Description:
-Header file for user_app1.c
+Header file for antrcc-receiver-engenuics.c  
 
 **********************************************************************************************************************/
 
@@ -54,51 +45,49 @@ Function Declarations
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Protected functions                                                                                                */
 /*--------------------------------------------------------------------------------------------------------------------*/
-void ANTRCC_CInitialize(void);
-void ANTRCC_CRunActiveState(void);
+void ANTRCC_C_Initialize(void);
 
+void ANTRCC_C_RunActiveState(void);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Private functions                                                                                                  */
 /*--------------------------------------------------------------------------------------------------------------------*/
-/* ANT Functions */
-static void ANTRCC_C_AntInit(void);
-static void ANTRCC_C_AntMasterConfig(void);
-static void ANTRCC_C_AntSendDirections(void);
+static void ANTRCC_C_AntInitialize(void);
 
-void SendDirections(void);
+static void ANTRCC_C_AntSendMessage(void);
 
-/* Engenuics Standard Functions */
+static void ANTRCC_C_MessageBytes(bool Forward, bool Backward, bool Left, bool Right);
+
+
 static void ANTRCC_C_Forward(void);
+
 static void ANTRCC_C_Backward(void);
-static void ANTRCC_C_ForwardLeft(void);
-static void ANTRCC_C_BackwardLeft(void);
+
 static void ANTRCC_C_LeftTurn(void);
+
 static void ANTRCC_C_RightTurn(void);
-static void ANTRCC_C_ForwardRight(void);
-static void ANTRCC_C_BackwardRight(void);
+
 static void ANTRCC_C_Stalled(void);
 
-/* CV Functions */
-void Forward(void);
-void Backward(void);
-void Left(void);
-void Right(void);
-void Stop(void);
-void ForwardLeft(void);
-void ForwardRight(void);
-void BackwardLeft(void);
-void BackwardRight(void);
 
+static void ANTRCC_C_ForwardLeft(void);
+
+static void ANTRCC_C_ForwardRight(void);
+
+static void ANTRCC_C_BackwardLeft(void);
+
+static void ANTRCC_C_BackwardRight(void);
 
 /***********************************************************************************************************************
 State Machine Declarations
 ***********************************************************************************************************************/
-static void ANTRCC_CSM_SendData(void);    
-static void ANTRCC_CSM_ANT_ChannelAssign(void);
-static void ANTRCC_CSM_Error(void);         
-static void ANTRCC_CSM_MasterConfig(void);
+static void ANTRCC_CSM_RobotActive(void);
 
+static void ANTRCC_CSM_Error(void);
+
+static void ANTRCC_CSM_AntChannelAssign(void);
+
+static void ANTRCC_CSM_AntStartup(void);
 
 #endif /* __ANTRCC_C_H */
 

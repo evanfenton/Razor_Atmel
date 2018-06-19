@@ -86,7 +86,9 @@ Includes
 #endif /* MPGL2 */
 
 /* Common application header files */
-#include "antrcc_controller_cv.h"
+
+#include "antrcc_controller_engenuics.h"
+
 #include "debug.h"
 #include "music.h"
 #include "user_app1.h"
