@@ -292,7 +292,7 @@ Description:
 Adjusts signals being sent to motor driver to make the robot move forward
 
 Requires:
-  - calls to signal functions are made with pre-defined signal names
+  - 
 
 Promises:
   - send signals to make motors spin forward
@@ -317,7 +317,7 @@ Description:
 Adjusts signals being sent to motor driver to make the robot move backward
 
 Requires:
-  - calls to signal functions are made with pre-defined signal names
+  - 
 
 Promises:
   - send signals to make motors spin backward
@@ -342,7 +342,7 @@ Description:
 Adjusts signals being sent to motor driver to make the robot turn left
 
 Requires:
-  - calls to signal functions are made with pre-defined signal names
+  - 
 
 Promises:
   - send signals to make right side motor spin forward
@@ -367,7 +367,7 @@ Description:
 Adjusts signals being sent to motor driver to make the robot turn right
 
 Requires:
-  - calls to signal functions are made with pre-defined signal names
+  -
 
 Promises:
   - send signals to make left side motor spin forward
@@ -465,7 +465,7 @@ Description:
 Adjusts signals being sent to motor driver to make the robot do a backward left turn
 
 Requires:
-  - calls to signal functions are made with pre-defined signal names
+  -
 
 Promises:
   - alternate the motor driver signals between backward and backward with left motor off
@@ -501,7 +501,7 @@ Description:
 Adjusts signals being sent to motor driver to make the robot do a backward right turn
 
 Requires:
-  - calls to signal functions are made with pre-defined signal names
+  - 
 
 Promises:
   - alternate the motor driver signals between backward and backward with right motor off
