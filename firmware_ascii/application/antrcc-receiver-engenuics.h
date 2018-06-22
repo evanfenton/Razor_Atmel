@@ -26,8 +26,16 @@ Constants / Definitions
 #define ANT_CHANNEL_USERAPP             ANT_CHANNEL_0         // Channel 0 - 7
 #define ANT_CHANNEL_PERIOD_LO_USERAPP   (u8)0x66              // LO; 0x0001 - 0x7fff
 #define ANT_CHANNEL_PERIOD_HI_USERAPP   (u8)0x06              // HI; 0x0001 - 0x7fff
-#define ANT_DEVICEID_LO_USERAPP         (u8)0x21              // Device # Low byte
-#define ANT_DEVICEID_HI_USERAPP         (u8)0x00              // Device # High byte
+
+
+/* DEVICE ID MUST BE CHANGED FOR EACH CONTROLLER-RECEIVER PAIR 
+   
+   DEFAULT IS 0x1234
+*/
+#define ANT_DEVICEID_LO_USERAPP         (u8)0x34              // Device # Low byte
+#define ANT_DEVICEID_HI_USERAPP         (u8)0x12              // Device # High byte
+
+
 #define ANT_DEVICE_TYPE_USERAPP         (u8)1                 // 1 - 255
 #define ANT_TRANSMISSION_TYPE_USERAPP   (u8)1                 // 1-127; MSB is pairing
 #define ANT_FREQUENCY_USERAPP           (u8)50                // 2400MHz + 0 - 99 MHz
@@ -107,7 +115,7 @@ static void ANTRCC_RSM_RobotActive(void);
 
 static void ANTRCC_RSM_RobotStalled(void);
 
-static void ANTRCC_RSM_AntCommInterupt(void);
+static void ANTRCC_RSM_Error(void);
 
 static void ANTRCC_RSM_AntChannelAssign(void);
 

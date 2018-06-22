@@ -84,8 +84,8 @@ When user is giving input and robot is moving.
 static void ANTRCC_RSM_RobotStalled(void)
 When user is not giving input and robot is stopped.
 
-static void ANTRCC_RSM_AntCommInterupt(void)
-When receiver has been disconnected from a controller for a certain amount of time.
+static void ANTRCC_RSM_Error(void)
+When receiver application error occurs
 
 static void ANTRCC_RSM_AntChannelAssign(void)
 Assigning channel and finalizing connection to controller.
@@ -279,7 +279,13 @@ static void ANTRCC_R_AntReadMessage(void)
   
   if(u32Timeout == 60000)
   {
-    ANTRCC_R_StateMachine = ANTRCC_RSM_AntCommInterupt;
+    LedBlink(RED, LED_2HZ);
+  
+    LCDCommand(LCD_CLEAR_CMD);
+    for(u32 i = 0; i < 10000; i++);
+    LCDMessage(LINE1_START_ADDR, "Lost Connection");
+    
+    ANTRCC_R_StateMachine = ANTRCC_RSM_Error;
   }  
   
 } /* end ANTRCC_R_AntReadMessage() */
@@ -720,26 +726,22 @@ static void ANTRCC_RSM_RobotStalled(void)
 
 
 /*--------------------------------------------------------------------------------------------------------------------
-Function: ANTRCC_RSM_AntCommInterupt
+Function: ANTRCC_RSM_Error
 
 Description:
-Robot has been disconnected from the controller for a certain amount of time
+application error occured
 
 Requires:
-  - 
+  - display error message and blink red LED before switching to this state
 
 Promises:
-  - display error message and blink red LED
+  - 
 */
-static void ANTRCC_RSM_AntCommInterupt(void)
+static void ANTRCC_RSM_Error(void)
 {
+  // PRESS RESET BUTTON
   
-  LCDCommand(LCD_CLEAR_CMD);
-  for(u32 i = 0; i < 10000; i++);
-  LedBlink(RED, LED_2HZ);
-  LCDMessage(LINE1_START_ADDR, "Lost Connection");
-  
-} /* end ANTRCC_RSM_AntCommInterupt() */
+} /* end ANTRCC_RSM_Error() */
 
 
 /*--------------------------------------------------------------------------------------------------------------------
@@ -770,7 +772,13 @@ static void ANTRCC_RSM_AntChannelAssign(void)
   
   if(ANTRCC_R_u32Timeout == 5000)
   {
-    ANTRCC_R_StateMachine = ANTRCC_RSM_AntCommInterupt;
+    LedBlink(RED, LED_2HZ);
+  
+    LCDCommand(LCD_CLEAR_CMD);
+    for(u32 i = 0; i < 10000; i++);
+    LCDMessage(LINE1_START_ADDR, "ANT Not Configured");
+    
+    ANTRCC_R_StateMachine = ANTRCC_RSM_Error;
   }
   
 } /* end ANTRCC_RSM_AntChannelAssign() */
@@ -806,7 +814,13 @@ static void ANTRCC_RSM_AntStartup(void)
     }
     else
     {
-      ANTRCC_R_StateMachine = ANTRCC_RSM_AntCommInterupt;
+      LedBlink(RED, LED_2HZ);
+  
+      LCDCommand(LCD_CLEAR_CMD);
+      for(u32 i = 0; i < 10000; i++);
+      LCDMessage(LINE1_START_ADDR, "Assign Channel Error");
+  
+      ANTRCC_R_StateMachine = ANTRCC_RSM_Error;
     }
   }
   

@@ -72,10 +72,6 @@ void main(void)
   /* Application initialization */
 
   ANTRCC_R_Initialize();
-  
-  //UserApp1Initialize();
-  //UserApp2Initialize();
-  //UserApp3Initialize();
 
   
   /* Exit initialization */
@@ -105,10 +101,6 @@ void main(void)
     /* Applications */
     
     ANTRCC_R_RunActiveState();
-    
-    //UserApp1RunActiveState();
-    //UserApp2RunActiveState();
-    //UserApp3RunActiveState();
     
     /* System sleep*/
     HEARTBEAT_OFF();
