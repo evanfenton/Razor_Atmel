@@ -24,8 +24,15 @@ Constants / Definitions
 #define ANT_CHANNEL_ANTRCC             ANT_CHANNEL_0         // Channel 0 - 7
 #define ANT_CHANNEL_PERIOD_LO_ANTRCC   (u8)0x66              // LO; 0x0001 - 0x7fff
 #define ANT_CHANNEL_PERIOD_HI_ANTRCC   (u8)0x06              // HI; 0x0001 - 0x7fff
+
+
+/* Device ID should be changed for different Controller-Receiver pairs */
+
 #define ANT_DEVICEID_LO_ANTRCC         (u8)0x34              // Device # Low byte
 #define ANT_DEVICEID_HI_ANTRCC         (u8)0x12              // Device # High byte
+
+
+
 #define ANT_DEVICE_TYPE_ANTRCC         (u8)1                 // 1 - 255
 #define ANT_TRANSMISSION_TYPE_ANTRCC   (u8)1                 // 1-127; MSB is pairing
 #define ANT_FREQUENCY_ANTRCC           (u8)50                // 2400MHz + 0 - 99 MHz

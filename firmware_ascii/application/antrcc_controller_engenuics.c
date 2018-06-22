@@ -617,15 +617,10 @@ Requires:
   - 
 
 Promises:
-  - display error message and blink red LED
+  - 
 */
 static void ANTRCC_CSM_Error(void)
 {
-  
-  LedBlink(RED, LED_2HZ);
-  LCDCommand(LCD_CLEAR_CMD);
-  for(u32 u32I = 0; u32I < 10000; u32I++);
-  LCDMessage(LINE1_START_ADDR, "Error!");
   
 } /* end ANTRCC_CSM_Error() */
 
@@ -646,6 +641,7 @@ Promises:
 */
 static void ANTRCC_CSM_AntChannelAssign(void)
 {
+  
   if(AntRadioStatusChannel(ANT_CHANNEL_ANTRCC) == ANT_CONFIGURED)
   {
     AntOpenChannelNumber(ANT_CHANNEL_ANTRCC);
@@ -661,6 +657,12 @@ static void ANTRCC_CSM_AntChannelAssign(void)
   
   if(ANTRCC_C_u32Timeout == 5000)
   {
+    LedBlink(RED, LED_2HZ);
+    
+    LCDCommand(LCD_CLEAR_CMD);
+    for(u32 u32I = 0; u32I < 10000; u32I++);
+    LCDMessage(LINE1_START_ADDR, "ANT Not Configured");
+    
     ANTRCC_C_StateMachine = ANTRCC_CSM_Error;
   }
   
@@ -694,6 +696,12 @@ static void ANTRCC_CSM_AntStartup(void)
     }
     else
     {
+      LedBlink(RED, LED_2HZ);
+    
+      LCDCommand(LCD_CLEAR_CMD);
+      for(u32 u32I = 0; u32I < 10000; u32I++);
+      LCDMessage(LINE1_START_ADDR, "Assign Channel Error");
+      
       ANTRCC_C_StateMachine = ANTRCC_CSM_Error;
     }
     
