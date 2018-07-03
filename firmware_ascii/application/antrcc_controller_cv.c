@@ -9,7 +9,7 @@ YOU WILL BE WRITING THE EVENT HANDLING LOGIC FOR THE CONTROLLER
 
 IN OUR CASE THE "EVENT" IS THE USERS INPUT WHICH IS GOING TO BE BUTTON PRESSING
 
-BELOW IS A REFERENCE TO THE FUNCTIONS YOU'LL NEED TO CALL 
+BELOW IS A REFERENCE TO ALL THE FUNCTIONS, SOME OF WHICH YOU'LL NEED TO CALL 
 
 WHEN YOU ARE READY TO START GO TO LINE 121
 
@@ -120,42 +120,8 @@ Function Definitions
 
 static void Controller_Active(void)
 {
-  if(IsButtonPressed(BUTTON0) && IsButtonPressed(BUTTON2))
-  {
-    Forward_Left();
-  }
-  else if(IsButtonPressed(BUTTON0) && IsButtonPressed(BUTTON3))
-  {
-    Forward_Right();
-  }
-  else if(IsButtonPressed(BUTTON0))
-  {
-    Forward();
-  }
-  else if(IsButtonPressed(BUTTON1) && IsButtonPressed(BUTTON2))
-  {
-    Backward_Left();
-  }
-  else if(IsButtonPressed(BUTTON1) && IsButtonPressed(BUTTON3))
-  {
-    Backward_Right();
-  }
-  else if(IsButtonPressed(BUTTON1))
-  {
-    Backward();
-  }
-  else if(IsButtonPressed(BUTTON2))
-  {
-    Left();
-  }
-  else if(IsButtonPressed(BUTTON3))
-  {
-    Right();
-  }
-  else
-  {
-    Stalled();
-  }
+  
+  // INSERT CODE HERE
   
   ANT_SendDirection();
   
