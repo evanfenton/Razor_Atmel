@@ -2,7 +2,10 @@
 File: antrcc_receiver_cv.h                                                                
 
 Description:
+
 Header file for antrcc_receiver_cv.c
+
+enGENIUS CAMP LEADERS MAKE SURE DEVICE ID BELOW IS CHANGED FROM 0x1234
 
 **********************************************************************************************************************/
 
@@ -22,8 +25,15 @@ Constants / Definitions
 #define ANT_CHANNEL_USERAPP             ANT_CHANNEL_0         // Channel 0 - 7
 #define ANT_CHANNEL_PERIOD_LO_USERAPP   (u8)0x66              // LO; 0x0001 - 0x7fff
 #define ANT_CHANNEL_PERIOD_HI_USERAPP   (u8)0x06              // HI; 0x0001 - 0x7fff
-#define ANT_DEVICEID_LO_USERAPP         (u8)0x21              // Device # Low byte
-#define ANT_DEVICEID_HI_USERAPP         (u8)0x00              // Device # High byte
+
+
+/* enGENIUS camp setup person needs to change the device ID for each group
+   for BOTH controller and receiver code */ 
+
+#define ANT_DEVICEID_LO_USERAPP         (u8)0x34              // Device # Low byte
+#define ANT_DEVICEID_HI_USERAPP         (u8)0x12              // Device # High byte
+
+
 #define ANT_DEVICE_TYPE_USERAPP         (u8)1                 // 1 - 255
 #define ANT_TRANSMISSION_TYPE_USERAPP   (u8)1                 // 1-127; MSB is pairing
 #define ANT_FREQUENCY_USERAPP           (u8)50                // 2400MHz + 0 - 99 MHz
@@ -98,6 +108,55 @@ static void ANT_Startup(void);
 
 
 #endif /* __ANTRCC_R_H */
+
+
+
+/* Correct code for enGENIUS camp below  
+
+
+static void Forward(void)
+{
+
+  SignalOff(DIR_REV);
+  SignalOn(DIR_FWD);
+  SignalOn(EN_LEFT);
+  SignalOn(EN_RIGHT);
+  
+}
+
+static void Backward(void)
+{
+  
+  SignalOn(DIR_REV);
+  SignalOff(DIR_FWD);
+  SignalOn(EN_LEFT);
+  SignalOn(EN_RIGHT);
+  
+}
+
+static void Left(void)
+{
+  
+  SignalOff(DIR_REV);
+  SignalOn(DIR_FWD);
+  SignalOff(EN_LEFT);
+  SignalOn(EN_RIGHT);
+  
+}
+
+static void Right(void)
+{
+  
+  SignalOff(DIR_REV);
+  SignalOn(DIR_FWD);
+  SignalOn(EN_LEFT);
+  SignalOff(EN_RIGHT);
+  
+}
+
+
+*/
+
 
 
 /*--------------------------------------------------------------------------------------------------------------------*/

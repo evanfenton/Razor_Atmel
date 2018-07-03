@@ -42,9 +42,6 @@ EN_RIGHT
 State Functions
 ---------------
 
-enGENIUS Campers: Write your code for reacting to controller commands in Receiver_Active().
-                  This function is called from the main super loop mentioned.
-
 void Receiver_Active();
 
 void Receiver_Stalled();
@@ -79,7 +76,7 @@ void Backward_Right();
 CAMP ENGENIUS STUDENTS MAY IGNORE THE FOLLOWING VARIABLE DEFINITIONS
 
 
-SKIP TO LINE ____
+SKIP TO LINE 148
 
 
 
@@ -147,45 +144,29 @@ Function Definitions
 
 static void Forward(void)
 {
-  PWMAudioOff(BUZZER1);
   
-  SignalOff(DIR_REV);
-  SignalOn(DIR_FWD);
-  SignalOn(EN_LEFT);
-  SignalOn(EN_RIGHT);
+  // INSERT CODE HERE
   
 }
 
 static void Backward(void)
 {
-  Backup_Beep();
   
-  SignalOn(DIR_REV);
-  SignalOff(DIR_FWD);
-  SignalOn(EN_LEFT);
-  SignalOn(EN_RIGHT);
+  // AND HERE
   
 }
 
 static void Left(void)
 {
-  PWMAudioOff(BUZZER1);
   
-  SignalOff(DIR_REV);
-  SignalOn(DIR_FWD);
-  SignalOff(EN_LEFT);
-  SignalOn(EN_RIGHT);
+  // AND HERE
   
 }
 
 static void Right(void)
 {
-  PWMAudioOff(BUZZER1);
   
-  SignalOff(DIR_REV);
-  SignalOn(DIR_FWD);
-  SignalOn(EN_LEFT);
-  SignalOff(EN_RIGHT);
+  // AND HERE
   
 }
 
@@ -278,7 +259,6 @@ static void Receiver_Active(void)
 
 static void Receiver_Stalled(void)
 {
-  PWMAudioOff(BUZZER1);
   
   // LCD IS RED
   Color_LCD(TRUE,FALSE,FALSE);
@@ -299,7 +279,7 @@ static void Receiver_CommInterupt(void)
   LCDCommand(LCD_CLEAR_CMD);
   for(u32 i = 0; i < 10000; i++);
   LedBlink(RED, LED_2HZ);
-  LCDMessage(LINE1_START_ADDR, "Lost Connection");
+  LCDMessage(LINE1_START_ADDR, "Error");
   
 }
 
@@ -363,7 +343,6 @@ void Receiver_Initialize(void)
   BL_counter= 0;
   BR_counter= 0;
   
-  PWMAudioSetFrequency(BUZZER1, BACKUP_BEEP_FREQ);
   
   Receiver_StateMachine = ANT_Startup;
 }
