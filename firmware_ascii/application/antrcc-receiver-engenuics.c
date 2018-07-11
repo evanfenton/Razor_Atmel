@@ -489,6 +489,14 @@ void ANTRCC_R_BackwardRight(void)
 } /* end ANTRCC_R_BackwardRight() */
 
 
+void Stop(void)
+{
+  
+  ANTRCC_R_SignalOff(EN_LEFT);
+  ANTRCC_R_SignalOff(EN_RIGHT);
+  
+}
+
 /*--------------------------------------------------------------------------------------------------------------------
 Function: ANTRCC_R_AntReadMessage
 

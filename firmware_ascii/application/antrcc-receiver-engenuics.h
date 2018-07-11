@@ -53,7 +53,7 @@ Constants / Definitions
 
 /* durations for combination directions */
 
-#define FIRST_DIR_RATE                  (u8)30
+#define FIRST_DIR_RATE                  (u8)45
 #define SEC_DIR_RATE                    (u8)50
 
 /**********************************************************************************************************************
@@ -90,6 +90,8 @@ void ANTRCC_R_ForwardRight(void);
 void ANTRCC_R_BackwardLeft(void);
 
 void ANTRCC_R_BackwardRight(void);
+
+void Stop(void);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Private functions                                                                                                  */

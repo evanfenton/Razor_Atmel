@@ -20,10 +20,10 @@ Type Definitions
 Constants / Definitions
 **********************************************************************************************************************/
 
-#define TURN_30     1000
-#define TURN_45     1500
-#define TURN_60     2000
-#define TURN_90     3000
+#define TURN_30     400
+#define TURN_45     500
+#define TURN_60     700
+#define TURN_90     1000
 
 #define FWD_05M     1500
 #define FWD_1M      3000

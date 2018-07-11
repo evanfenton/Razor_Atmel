@@ -48,10 +48,11 @@ Variable names shall start with "RT_Driver_" and be declared as static.
 static fnCode_type RT_Driver_StateMachine;            /* The state machine function pointer */
 static u32 RT_Driver_u32Timeout;                      /* Timeout counter used across states */
 
-static u8 RT_Driver_Directions [30] = {1,3,1,3,1,3,1,3,1,4,1,4,1,6,1,5,4,1,3,1,3,1,3,1,6,1,5,1,3,1};
+static u8 RT_Driver_Directions [32] = {0,5,3,1,3,1,3,1,3,1,4,1,4,1,6,1,5,4,1,3,1,3,1,3,1,6,1,5,1,3,1,0};
 
-static u32 RT_Driver_Times [30] = 
-{FWD_15M,
+static u32 RT_Driver_Times [32] = 
+{3000,
+ FWD_15M,
  TURN_90,
  FWD_15M,
  TURN_30,
@@ -80,7 +81,8 @@ static u32 RT_Driver_Times [30] =
  FWD_05M,
  FWD_15M,
  TURN_90,
- FWD_2M
+ FWD_2M,
+ 1
  };
 
 static u32 RT_Driver_Timer;
@@ -148,6 +150,9 @@ void RT_DriverRunActiveState(void)
 /*--------------------------------------------------------------------------------------------------------------------*/
 
 
+
+
+
 /**********************************************************************************************************************
 State Machine Function Definitions
 **********************************************************************************************************************/
@@ -191,6 +196,9 @@ static void RT_DriverSM_Idle(void)
     else if(RT_Driver_Directions[RT_Driver_Index] == 8)
     {
       ANTRCC_R_BackwardRight();
+    }
+    else{
+      Stop();
     }
     
     RT_Driver_Timer++;
