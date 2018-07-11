@@ -245,6 +245,251 @@ static void ANTRCC_R_AntInitialize(void)
 
 
 /*--------------------------------------------------------------------------------------------------------------------
+Function: ANTRCC_R_Forward
+
+Description:
+Adjusts signals being sent to motor driver to make the robot move forward
+
+Requires:
+  - 
+
+Promises:
+  - send signals to make motors spin forward
+  - LCD is GREEN
+*/
+void ANTRCC_R_Forward(void)
+{
+  ANTRCC_R_ColorLCD(FALSE,TRUE,FALSE);
+  
+  ANTRCC_R_SignalOff(DIR_REV);
+  ANTRCC_R_SignalOn(DIR_FWD);
+  ANTRCC_R_SignalOn(EN_LEFT);
+  ANTRCC_R_SignalOn(EN_RIGHT);
+  
+} /* end ANTRCC_R_Forward() */
+
+
+/*--------------------------------------------------------------------------------------------------------------------
+Function: ANTRCC_R_Backward
+
+Description:
+Adjusts signals being sent to motor driver to make the robot move backward
+
+Requires:
+  - 
+
+Promises:
+  - send signals to make motors spin backward
+  - LCD is YELLOW
+*/
+void ANTRCC_R_Backward(void)
+{
+  ANTRCC_R_ColorLCD(TRUE,TRUE,FALSE);
+  
+  ANTRCC_R_SignalOn(DIR_REV);
+  ANTRCC_R_SignalOff(DIR_FWD);
+  ANTRCC_R_SignalOn(EN_LEFT);
+  ANTRCC_R_SignalOn(EN_RIGHT);
+  
+} /* end ANTRCC_R_Backward() */
+
+
+/*--------------------------------------------------------------------------------------------------------------------
+Function: ANTRCC_R_LeftTurn
+
+Description:
+Adjusts signals being sent to motor driver to make the robot turn left
+
+Requires:
+  - 
+
+Promises:
+  - send signals to make right side motor spin forward
+  - LCD is PURPLE
+*/
+void ANTRCC_R_LeftTurn(void)
+{
+  ANTRCC_R_ColorLCD(TRUE,FALSE,TRUE);
+  
+  ANTRCC_R_SignalOff(DIR_REV);
+  ANTRCC_R_SignalOn(DIR_FWD);
+  ANTRCC_R_SignalOff(EN_LEFT);
+  ANTRCC_R_SignalOn(EN_RIGHT);
+  
+} /* end ANTRCC_R_LeftTurn() */
+
+
+/*--------------------------------------------------------------------------------------------------------------------
+Function: ANTRCC_R_RightTurn
+
+Description:
+Adjusts signals being sent to motor driver to make the robot turn right
+
+Requires:
+  -
+
+Promises:
+  - send signals to make left side motor spin forward
+  - LCD is BLUE
+*/
+void ANTRCC_R_RightTurn(void)
+{
+  ANTRCC_R_ColorLCD(FALSE,FALSE,TRUE);
+  
+  ANTRCC_R_SignalOff(DIR_REV);
+  ANTRCC_R_SignalOn(DIR_FWD);
+  ANTRCC_R_SignalOn(EN_LEFT);
+  ANTRCC_R_SignalOff(EN_RIGHT);
+  
+} /* end ANTRCC_R_RightTurn() */
+
+
+/*--------------------------------------------------------------------------------------------------------------------
+Function: ANTRCC_R_ForwardLeft
+
+Description:
+Adjusts signals being sent to motor driver to make the robot move forward and left
+for a more gradual turn
+
+Requires:
+  - 
+
+Promises:
+  - alternate the motor driver signals between forward and left
+  - LCD is WHITE
+*/
+void ANTRCC_R_ForwardLeft(void)
+{
+  ANTRCC_R_ComboCounter++;
+  
+  if(ANTRCC_R_ComboCounter < FIRST_DIR_RATE)
+  {
+    ANTRCC_R_Forward();
+  }
+  else if(ANTRCC_R_ComboCounter < SEC_DIR_RATE)
+  {
+    ANTRCC_R_LeftTurn();
+  }
+  else
+  {
+    ANTRCC_R_ComboCounter= 0;
+  }
+  
+  ANTRCC_R_ColorLCD(TRUE,TRUE,TRUE);
+  
+} /* end ANTRCC_R_ForwardLeft() */
+
+
+
+/*--------------------------------------------------------------------------------------------------------------------
+Function: ANTRCC_R_ForwardRight
+
+Description:
+Adjusts signals being sent to motor driver to make the robot move forward and right
+for a more gradual turn
+
+Requires:
+  - 
+
+Promises:
+  - alternate the motor driver signals between forward and right
+  - LCD is WHITE
+*/
+void ANTRCC_R_ForwardRight(void)
+{
+  ANTRCC_R_ComboCounter++;
+  
+  if(ANTRCC_R_ComboCounter < FIRST_DIR_RATE)
+  {
+    ANTRCC_R_Forward();
+  }
+  else if(ANTRCC_R_ComboCounter < SEC_DIR_RATE)
+  {
+    ANTRCC_R_RightTurn();
+  }
+  else
+  {
+    ANTRCC_R_ComboCounter= 0;
+  }
+  
+  ANTRCC_R_ColorLCD(TRUE,TRUE,TRUE);
+  
+} /* end ANTRCC_R_ForwardRight() */
+
+
+/*--------------------------------------------------------------------------------------------------------------------
+Function: ANTRCC_R_BackwardLeft
+
+Description:
+Adjusts signals being sent to motor driver to make the robot do a backward left turn
+
+Requires:
+  -
+
+Promises:
+  - alternate the motor driver signals between backward and backward with left motor off
+  - LCD is WHITE
+*/
+void ANTRCC_R_BackwardLeft(void)
+{
+  ANTRCC_R_ComboCounter++;
+  
+  if(ANTRCC_R_ComboCounter < FIRST_DIR_RATE)
+  {
+    ANTRCC_R_Backward();
+  }
+  else if(ANTRCC_R_ComboCounter < SEC_DIR_RATE)
+  {
+    ANTRCC_R_Backward();
+    ANTRCC_R_SignalOff(EN_LEFT);
+  }
+  else
+  {
+    ANTRCC_R_ComboCounter= 0;
+  }
+  
+  ANTRCC_R_ColorLCD(TRUE,TRUE,TRUE);
+  
+} /* end ANTRCC_R_BackwardLeft() */
+
+
+/*--------------------------------------------------------------------------------------------------------------------
+Function: ANTRCC_R_BackwardRight
+
+Description:
+Adjusts signals being sent to motor driver to make the robot do a backward right turn
+
+Requires:
+  - 
+
+Promises:
+  - alternate the motor driver signals between backward and backward with right motor off
+  - LCD is WHITE
+*/
+void ANTRCC_R_BackwardRight(void)
+{
+  ANTRCC_R_ComboCounter++;
+  
+  if(ANTRCC_R_ComboCounter < FIRST_DIR_RATE)
+  {
+    ANTRCC_R_Backward();
+  }
+  else if(ANTRCC_R_ComboCounter < SEC_DIR_RATE)
+  {
+    ANTRCC_R_Backward();
+    ANTRCC_R_SignalOff(EN_RIGHT);
+  }
+  else
+  {
+    ANTRCC_R_ComboCounter= 0;
+  }
+  
+  ANTRCC_R_ColorLCD(TRUE,TRUE,TRUE);
+  
+} /* end ANTRCC_R_BackwardRight() */
+
+
+/*--------------------------------------------------------------------------------------------------------------------
 Function: ANTRCC_R_AntReadMessage
 
 Description:
@@ -290,250 +535,6 @@ static void ANTRCC_R_AntReadMessage(void)
   
 } /* end ANTRCC_R_AntReadMessage() */
 
-
-/*--------------------------------------------------------------------------------------------------------------------
-Function: ANTRCC_R_Forward
-
-Description:
-Adjusts signals being sent to motor driver to make the robot move forward
-
-Requires:
-  - 
-
-Promises:
-  - send signals to make motors spin forward
-  - LCD is GREEN
-*/
-static void ANTRCC_R_Forward(void)
-{
-  ANTRCC_R_ColorLCD(FALSE,TRUE,FALSE);
-  
-  ANTRCC_R_SignalOff(DIR_REV);
-  ANTRCC_R_SignalOn(DIR_FWD);
-  ANTRCC_R_SignalOn(EN_LEFT);
-  ANTRCC_R_SignalOn(EN_RIGHT);
-  
-} /* end ANTRCC_R_Forward() */
-
-
-/*--------------------------------------------------------------------------------------------------------------------
-Function: ANTRCC_R_Backward
-
-Description:
-Adjusts signals being sent to motor driver to make the robot move backward
-
-Requires:
-  - 
-
-Promises:
-  - send signals to make motors spin backward
-  - LCD is YELLOW
-*/
-static void ANTRCC_R_Backward(void)
-{
-  ANTRCC_R_ColorLCD(TRUE,TRUE,FALSE);
-  
-  ANTRCC_R_SignalOn(DIR_REV);
-  ANTRCC_R_SignalOff(DIR_FWD);
-  ANTRCC_R_SignalOn(EN_LEFT);
-  ANTRCC_R_SignalOn(EN_RIGHT);
-  
-} /* end ANTRCC_R_Backward() */
-
-
-/*--------------------------------------------------------------------------------------------------------------------
-Function: ANTRCC_R_LeftTurn
-
-Description:
-Adjusts signals being sent to motor driver to make the robot turn left
-
-Requires:
-  - 
-
-Promises:
-  - send signals to make right side motor spin forward
-  - LCD is PURPLE
-*/
-static void ANTRCC_R_LeftTurn(void)
-{
-  ANTRCC_R_ColorLCD(TRUE,FALSE,TRUE);
-  
-  ANTRCC_R_SignalOff(DIR_REV);
-  ANTRCC_R_SignalOn(DIR_FWD);
-  ANTRCC_R_SignalOff(EN_LEFT);
-  ANTRCC_R_SignalOn(EN_RIGHT);
-  
-} /* end ANTRCC_R_LeftTurn() */
-
-
-/*--------------------------------------------------------------------------------------------------------------------
-Function: ANTRCC_R_RightTurn
-
-Description:
-Adjusts signals being sent to motor driver to make the robot turn right
-
-Requires:
-  -
-
-Promises:
-  - send signals to make left side motor spin forward
-  - LCD is BLUE
-*/
-static void ANTRCC_R_RightTurn(void)
-{
-  ANTRCC_R_ColorLCD(FALSE,FALSE,TRUE);
-  
-  ANTRCC_R_SignalOff(DIR_REV);
-  ANTRCC_R_SignalOn(DIR_FWD);
-  ANTRCC_R_SignalOn(EN_LEFT);
-  ANTRCC_R_SignalOff(EN_RIGHT);
-  
-} /* end ANTRCC_R_RightTurn() */
-
-
-/*--------------------------------------------------------------------------------------------------------------------
-Function: ANTRCC_R_ForwardLeft
-
-Description:
-Adjusts signals being sent to motor driver to make the robot move forward and left
-for a more gradual turn
-
-Requires:
-  - 
-
-Promises:
-  - alternate the motor driver signals between forward and left
-  - LCD is WHITE
-*/
-static void ANTRCC_R_ForwardLeft(void)
-{
-  ANTRCC_R_ComboCounter++;
-  
-  if(ANTRCC_R_ComboCounter < FIRST_DIR_RATE)
-  {
-    ANTRCC_R_Forward();
-  }
-  else if(ANTRCC_R_ComboCounter < SEC_DIR_RATE)
-  {
-    ANTRCC_R_LeftTurn();
-  }
-  else
-  {
-    ANTRCC_R_ComboCounter= 0;
-  }
-  
-  ANTRCC_R_ColorLCD(TRUE,TRUE,TRUE);
-  
-} /* end ANTRCC_R_ForwardLeft() */
-
-
-
-/*--------------------------------------------------------------------------------------------------------------------
-Function: ANTRCC_R_ForwardRight
-
-Description:
-Adjusts signals being sent to motor driver to make the robot move forward and right
-for a more gradual turn
-
-Requires:
-  - 
-
-Promises:
-  - alternate the motor driver signals between forward and right
-  - LCD is WHITE
-*/
-static void ANTRCC_R_ForwardRight(void)
-{
-  ANTRCC_R_ComboCounter++;
-  
-  if(ANTRCC_R_ComboCounter < FIRST_DIR_RATE)
-  {
-    ANTRCC_R_Forward();
-  }
-  else if(ANTRCC_R_ComboCounter < SEC_DIR_RATE)
-  {
-    ANTRCC_R_RightTurn();
-  }
-  else
-  {
-    ANTRCC_R_ComboCounter= 0;
-  }
-  
-  ANTRCC_R_ColorLCD(TRUE,TRUE,TRUE);
-  
-} /* end ANTRCC_R_ForwardRight() */
-
-
-/*--------------------------------------------------------------------------------------------------------------------
-Function: ANTRCC_R_BackwardLeft
-
-Description:
-Adjusts signals being sent to motor driver to make the robot do a backward left turn
-
-Requires:
-  -
-
-Promises:
-  - alternate the motor driver signals between backward and backward with left motor off
-  - LCD is WHITE
-*/
-static void ANTRCC_R_BackwardLeft(void)
-{
-  ANTRCC_R_ComboCounter++;
-  
-  if(ANTRCC_R_ComboCounter < FIRST_DIR_RATE)
-  {
-    ANTRCC_R_Backward();
-  }
-  else if(ANTRCC_R_ComboCounter < SEC_DIR_RATE)
-  {
-    ANTRCC_R_Backward();
-    ANTRCC_R_SignalOff(EN_LEFT);
-  }
-  else
-  {
-    ANTRCC_R_ComboCounter= 0;
-  }
-  
-  ANTRCC_R_ColorLCD(TRUE,TRUE,TRUE);
-  
-} /* end ANTRCC_R_BackwardLeft() */
-
-
-/*--------------------------------------------------------------------------------------------------------------------
-Function: ANTRCC_R_BackwardRight
-
-Description:
-Adjusts signals being sent to motor driver to make the robot do a backward right turn
-
-Requires:
-  - 
-
-Promises:
-  - alternate the motor driver signals between backward and backward with right motor off
-  - LCD is WHITE
-*/
-static void ANTRCC_R_BackwardRight(void)
-{
-  ANTRCC_R_ComboCounter++;
-  
-  if(ANTRCC_R_ComboCounter < FIRST_DIR_RATE)
-  {
-    ANTRCC_R_Backward();
-  }
-  else if(ANTRCC_R_ComboCounter < SEC_DIR_RATE)
-  {
-    ANTRCC_R_Backward();
-    ANTRCC_R_SignalOff(EN_RIGHT);
-  }
-  else
-  {
-    ANTRCC_R_ComboCounter= 0;
-  }
-  
-  ANTRCC_R_ColorLCD(TRUE,TRUE,TRUE);
-  
-} /* end ANTRCC_R_BackwardRight() */
 
 
 /*--------------------------------------------------------------------------------------------------------------------

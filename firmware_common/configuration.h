@@ -90,6 +90,7 @@ Includes
 #include "music.h"
 
 #include "antrcc-receiver-engenuics.h"
+#include "race-track-driver.h"
 
 #include "user_app1.h"
 #include "user_app2.h"

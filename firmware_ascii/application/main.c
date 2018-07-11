@@ -71,7 +71,7 @@ void main(void)
 
   /* Application initialization */
 
-  ANTRCC_R_Initialize();
+  RT_DriverInitialize();
 
   
   /* Exit initialization */
@@ -100,7 +100,7 @@ void main(void)
 
     /* Applications */
     
-    ANTRCC_R_RunActiveState();
+    RT_DriverRunActiveState();
     
     /* System sleep*/
     HEARTBEAT_OFF();

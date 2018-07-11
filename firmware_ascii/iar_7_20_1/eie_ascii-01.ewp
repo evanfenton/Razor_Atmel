@@ -2059,6 +2059,9 @@
         <name>$PROJ_DIR$\..\..\firmware_common\application\music.h</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\application\race-track-driver.h</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\firmware_common\application\user_app1.h</name>
       </file>
       <file>
@@ -2078,6 +2081,9 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\application\main.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\application\race-track-driver.c</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\firmware_common\application\user_app1.c</name>
