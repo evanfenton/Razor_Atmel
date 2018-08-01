@@ -511,7 +511,7 @@ counter must be set at 1280. */
     00 [1] PA_00_TP54 PIO control enabled
 */
 
-#define PIOB_PER_INIT (u32)0x01BFFF57
+#define PIOB_PER_INIT (u32)0x01BFFFBF
 /*
     31 [0] PB_31_ PIO control not enabled
     30 [0] PB_30_ PIO control not enabled
@@ -546,9 +546,9 @@ counter must be set at 1280. */
     07 [1] PB_07_TP60 PIO control enabled
     06 [0] PB_06_TP58 PIO control not enabled
     05 [1] PB_05_TP56 PIO control enabled
-    04 [0] PB_04_BLADE_AN1 PIO control not enabled
+    04 [1] PB_04_BLADE_AN1 PIO control enabled
 
-    03 [0] PB_03_BLADE_AN0 PIO control not enabled
+    03 [1] PB_03_BLADE_AN0 PIO control enabled
     02 [1] PB_02_BUTTON3 PIO control enabled
     01 [1] PB_01_BUTTON2 PIO control enabled
     00 [1] PB_00_BUTTON1 PIO control enabled
@@ -603,7 +603,7 @@ counter must be set at 1280. */
     00 [0] PA_00_TP54 not controlled by peripheral
 */
 
-#define PIOB_PDR_INIT (u32)0x00400058
+#define PIOB_PDR_INIT (u32)0x00400040
 /*
     31 [0] PB_31_ 
     30 [0] PB_30_ 
@@ -638,9 +638,9 @@ counter must be set at 1280. */
     07 [0] PB_07_TP60 not controlled by peripheral
     06 [1] PB_06_TP58 controlled by peripheral
     05 [0] PB_05_TP56 not controlled by peripheral
-    04 [1] PB_04_BLADE_AN1 controlled by peripheral
+    04 [0] PB_04_BLADE_AN1 not controlled by peripheral
 
-    03 [1] PB_03_BLADE_AN0 controlled by peripheral
+    03 [0] PB_03_BLADE_AN0 not controlled by peripheral
     02 [0] PB_02_BUTTON3 not controlled by peripheral
     01 [0] PB_01_BUTTON2 not controlled by peripheral
     00 [0] PB_00_BUTTON1 not controlled by peripheral
@@ -694,7 +694,7 @@ Configures the pin as an output or input.
     00 [1] PA_00_TP54 output enabled
 */
 
-#define PIOB_OER_INIT (u32)0x01BFFFE0
+#define PIOB_OER_INIT (u32)0x01BFFFF0
 /*
     31 [0] PB_31_
     30 [0] PB_30_
@@ -729,7 +729,7 @@ Configures the pin as an output or input.
     07 [1] PB_07_TP60 output enabled
     06 [1] PB_06_TP58 output enabled
     05 [1] PB_05_TP56 output enabled
-    04 [0] PB_04_BLADE_AN1 input
+    04 [1] PB_04_BLADE_AN1 output enabled
 
     03 [0] PB_03_BLADE_AN0 input
     02 [0] PB_02_BUTTON3 input
@@ -784,7 +784,7 @@ Configures the pin as an output or input.
     00 [0] PA_00_TP54 output 
 */
 
-#define PIOB_ODR_INIT (u32)0x0040001F
+#define PIOB_ODR_INIT (u32)0x0040000F
 /*
     31 [0] PB_31_
     30 [0] PB_30_
@@ -819,7 +819,7 @@ Configures the pin as an output or input.
     07 [0] PB_07_TP60 output 
     06 [0] PB_06_TP58 output 
     05 [0] PB_05_TP56 output 
-    04 [1] PB_04_BLADE_AN1 input
+    04 [0] PB_04_BLADE_AN1 output
 
     03 [1] PB_03_BLADE_AN0 input
     02 [1] PB_02_BUTTON3 input
@@ -1326,7 +1326,7 @@ Initial output values are stored here.
     00 [1] PA_00_TP54 not open drain
 */
 
-#define PIOB_MDDR_INIT (u32)0x01FFFFFF
+#define PIOB_MDDR_INIT (u32)0x01FFFFEF
 /*
     31 [0] PB_31_
     30 [0] PB_30_
@@ -1361,9 +1361,9 @@ Initial output values are stored here.
     07 [1] PB_07_TP60 not open drain
     06 [1] PB_06_TP58 not open drain
     05 [1] PB_05_TP56 not open drain
-    04 [1] PB_04_BLADE_AN1 not open drain
+    04 [0] PB_04_BLADE_AN1 open drain
 
-    03 [1] PB_03_BLADE_AN0 not open drain
+    03 [1] PB_03_BLADE_AN0 not open drain         UNSURE IF THIS SHOULD BE 0
     02 [1] PB_02_BUTTON3 not open drain
     01 [1] PB_01_BUTTON2 not open drain
     00 [1] PB_00_BUTTON1 not open drain
@@ -1506,7 +1506,7 @@ Initial output values are stored here.
     00 [1] PA_00_TP54 pull-up enabled
 */
 
-#define PIOB_PPUER_INIT (u32)0x000001C0
+#define PIOB_PPUER_INIT (u32)0x000001A0
 /*
     31 [0] PB_31_
     30 [0] PB_30_
@@ -1632,7 +1632,7 @@ Initial output values are stored here.
     07 [0] PB_07_TP60 N/A
     06 [0] PB_06_TP58 N/A
     05 [0] PB_05_TP56 N/A
-    04 [1] PB_04_BLADE_AN1 PERIPHERAL B
+    04 [1] PB_04_BLADE_AN1 PERIPHERAL B     //ASK ABOUT THIS
 
     03 [1] PB_03_BLADE_AN0 PERIPHERAL B
     02 [0] PB_02_BUTTON3 N/A
@@ -1920,7 +1920,7 @@ Tdiv_slclk = 2*(DIV+1)*Tslow_clock.
     00 [0] PA_00_TP54
 */
 
-#define PIOB_OWER_INIT (u32)0x01FFFE0
+#define PIOB_OWER_INIT (u32)0x01FFFE10
 /*
     31 [0] PB_31_
     30 [0] PB_30_
@@ -1955,7 +1955,7 @@ Tdiv_slclk = 2*(DIV+1)*Tslow_clock.
     07 [0] PB_07_TP60
     06 [0] PB_06_TP58
     05 [0] PB_05_TP56
-    04 [0] PB_04_BLADE_AN1
+    04 [1] PB_04_BLADE_AN1 write enabled
 
     03 [0] PB_03_BLADE_AN0
     02 [0] PB_02_BUTTON3

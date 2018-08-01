@@ -189,6 +189,12 @@
       <file>
         <name>$PROJ_DIR$\..\..\firmware_common\typedefs.h</name>
       </file>
+      <file>
+        <name>$PROJ_DIR$\..\application\walle-roomba.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\application\walle-roomba.h</name>
+      </file>
     </group>
     <group>
       <name>Source</name>

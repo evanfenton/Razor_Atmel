@@ -71,7 +71,7 @@ void main(void)
 
   /* Application initialization */
 
-  RT_DriverInitialize();
+  WR_Initialize();
 
   
   /* Exit initialization */
@@ -100,7 +100,7 @@ void main(void)
 
     /* Applications */
     
-    RT_DriverRunActiveState();
+    WR_RunActiveState();
     
     /* System sleep*/
     HEARTBEAT_OFF();

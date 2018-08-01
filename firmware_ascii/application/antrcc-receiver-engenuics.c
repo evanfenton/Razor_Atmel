@@ -600,7 +600,7 @@ Requires:
 Promises:
   - pin signal set to HIGH (~5V)
 */
-static void ANTRCC_R_SignalOn(u32 pin)
+void ANTRCC_R_SignalOn(u32 pin)
 {
   u32 *pu32ToggleGPIO= (u32*)(&(AT91C_BASE_PIOA->PIO_SODR));
   *pu32ToggleGPIO = pin;
@@ -621,7 +621,7 @@ Requires:
 Promises:
   - pin signal set to LOW (~0V)
 */
-static void ANTRCC_R_SignalOff(u32 pin)
+void ANTRCC_R_SignalOff(u32 pin)
 {
   u32 *pu32ToggleGPIO= (u32*)(&(AT91C_BASE_PIOA->PIO_CODR));
   *pu32ToggleGPIO = pin;
